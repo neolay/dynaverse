@@ -5,13 +5,18 @@ export function init(Constants) {
 
     Constants.UserBehaviorDirectory = "behaviors/diverse";
     Constants.UserBehaviorModules = [
-        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "replaceWorld.js", "blocksEditor.js"
+        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "replaceWorld.js"
     ];
 
-    Constants.ExcludedSystemBehaviorModules = ["gizmo.js"];
-    Constants.IncludedSystemBehaviorModules = ["pedestal.js"];
-
     Constants.DefaultCards = [
+        {
+            card: {
+                name: "entrance",
+                type: "object",
+                translation: [0, 0.4, 4],
+                spawn: "default",
+            }
+        },
         {
             card: {
                 name: "world model",
@@ -44,11 +49,12 @@ export function init(Constants) {
                 type: "3d",
                 dataLocation: "./assets/3D/scratch_cat.glb.zip",
                 layers: ["pointer"],
-                translation: [-2.973275739954604, -0.746324277905422, -8],
-                rotation: [0, 0.042575427635536914, 0, 0.9990932553879298],
-                dataScale: [2.5, 2.5, 2.5],
+                translation: [4.3, -0.27, -8.5],
+                dataScale: [2, 2, 2],
                 shadow: true,
-                behaviorModules: ["BlocksEditor"],
+                sound: "./assets/sounds/Meow.wav",
+                behaviorModules: ["SpriteSound", "Throb"],
+                throbTimes: 1,
             }
         },
         {
@@ -76,8 +82,7 @@ export function init(Constants) {
                 type: "3d",
                 dataLocation: "./assets/3D/windmill.glb.zip",
                 layers: ["pointer"],
-                translation: [3.353431584172484, 0.32, -10],
-                rotation: [-0.7063054944928459, 0.03365335717601678, 0.7063054944928457, 0.033653357176016786],
+                translation: [-4, 0.4, -10],
                 dataScale: [0.7, 0.7, 0.7],
                 shadow: true,
                 behaviorModules: ["SimpleSpin"],
@@ -106,36 +111,39 @@ export function init(Constants) {
         },
         {
             card: {
-                name: "message",
-                text: "Blocks!",
+                name: "welcome message",
+                text: "Welcome",
                 color: 0xF0493E,
                 frameColor: 0x444444,
                 weight: 'bold',
                 font: "helvetiker",
                 fullBright: true,
                 bevelEnabled: false,
-                translation: [-7.066189321712586, -0.4259831336397919, -10.00003322547244],
-                rotation: [0, 0.4153962766047525, 0, 0.9096405517471765],
+                translation: [-8, -1, -10],
+                rotation: [0, Math.PI / 4, 0],
                 scale: [2, 2, 2],
-                behaviorModules: ["Text3D", "BlocksEditor"],
+                behaviorModules: ["Text3D", "Throb"],
                 shadow: true,
+                throbTimes: 3,
             }
         },
         {
             card: {
-                name: "dynalab",
-                translation: [-0.2, 0.5, -10],
-                scale: [2, 2, 2],
+                name: "pixel world card",
+                translation: [0, 0.4, -10],
+                scale: [4, 4, 4],
+                behaviorModules: ["ReplaceWorld"],
+                replaceWorldTargetURL: "?world=pixel",
+                layers: ["pointer"],
                 type: "2d",
                 textureType: "image",
-                textureLocation: "3BGpBXkpV9coWx6zMWorilvkUn4P856H2wYmCwKITE8wKjY2MjF4bW0kKy4nMWw3MWwhMC0zNyc2bCstbTdtOBc2NRINOAQ3DRFzCSslDxgrd3F7OgQGBXpycG0rLWwhMC0zNyc2bC8rITAtNCcwMSdsLi0hIy4mJzQmJyQjNy42bXMwFTIBACwUCRUYNyUGCB0dexQVLDUgATQFOjFyNilwKytwIHAdOwsTCg9tJiM2I20bCXEVDS8KAXEIDRc6czMrBHouFgcSJhcYKgp6DBcVdTUnNhoHCgRxBwcX",
+                textureLocation: "./assets/images/pixel-world.png",
                 fullBright: true,
                 frameColor: 0xcccccc,
-                color: 0xbbbbbb,
+                color: 0xffffff,
                 cornerRadius: 0.05,
                 depth: 0.05,
                 shadow: true,
-                behaviorModules: ["BlocksEditor"],
             }
         },
     ];
