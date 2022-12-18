@@ -21,6 +21,7 @@ class BlocksEditorPawn {
                 text-shadow: 2px 2px 2px rgb(0 0 0 / 50%);
                 border-radius: 8px; 
                 background-color: rgba(0, 0, 0, 0.5);">
+                <button id="close-editor-button" type="button" class="btn btn-danger btn-x topleft">x</button>
                 <p style="font-size: 12px; margin: 0;">Snap<em>!</em></p>
                 <canvas id="snap" tabindex="1" width="450" height="600"></canvas>
             </div>`;
@@ -33,11 +34,16 @@ class BlocksEditorPawn {
                 wrapper[`on${event}`] = event => event.stopPropagation();
             }
             document.body.appendChild(wrapper);
+            const button = document.getElementById("close-editor-button");
+            button.onclick = () => {
+                const editor = document.getElementById("editor");
+                editor.remove();
+            }
 
             const ide = new IDE_Morph({
-                path: './lib/snap',
-                load: './blocks/dynaverse-blocks.xml',
-                lang: 'zh_CN',
+                path: "./lib/snap",
+                load: "./blocks/dynaverse-blocks.xml",
+                lang: "zh_CN",
                 design: "flat",
                 border: 1,
                 hideControls: true,
@@ -52,7 +58,7 @@ class BlocksEditorPawn {
                 requestAnimationFrame(loop);
                 window.world.doOneCycle();
             };
-            window.world = new WorldMorph(document.getElementById('snap'), false);
+            window.world = new WorldMorph(document.getElementById("snap"), false);
             ide.openIn(window.world);
             requestAnimationFrame(loop);
         }
