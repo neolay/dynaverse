@@ -1,3 +1,19 @@
+class BlocksEditorActor {
+    setup() {
+        this.startScale = this.scale;
+        this.listen("setSizeTo", this.setSize);
+    }
+
+    setSize(percent) {
+        const scale = [
+            this.startScale[0] * percent / 100,
+            this.startScale[1] * percent / 100,
+            this.startScale[2] * percent / 100
+        ];
+        this.scaleTo(scale);
+    }
+}
+
 class BlocksEditorPawn {
     setup() {
         this.addEventListener("pointerDown", this.pointerDown);
@@ -60,6 +76,7 @@ class BlocksEditorPawn {
             };
             window.world = new WorldMorph(document.getElementById("snap"), false);
             ide.openIn(window.world);
+            ide.addMessageListener("setSizeTo", percent => this.say("setSizeTo", percent));
             requestAnimationFrame(loop);
         }
     }
@@ -69,7 +86,8 @@ export default {
     modules: [
         {
             name: "BlocksEditor",
-            pawnBehaviors: [BlocksEditorPawn],
+            actorBehaviors: [BlocksEditorActor],
+            pawnBehaviors: [BlocksEditorPawn]
         }
     ]
 }
