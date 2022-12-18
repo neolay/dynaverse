@@ -10,8 +10,7 @@ class BlocksEditorPawn {
                 editor.remove();
             }
             const div = document.createElement("div");
-            div.setAttribute("id", "editor");
-            div.innerHTML = `<div style="
+            div.innerHTML = `<div id="editor" style="
                 z-index: 1;
                 position: absolute;
                 bottom: 10px;
@@ -25,7 +24,15 @@ class BlocksEditorPawn {
                 <p style="font-size: 12px; margin: 0;">Snap<em>!</em></p>
                 <canvas id="snap" tabindex="1" width="450" height="600"></canvas>
             </div>`;
-            document.body.appendChild(div);
+            const wrapper = div.firstChild;
+            for (const event of ["keydown", "keyup",
+                "click", "mousedown", "mouseup", "mousemove", "wheel",
+                "touchstart", "touchend", "touchmove", "touchcancel",
+                "pointerdown", "pointerup", "pointermove", "pointercancel",
+            ]) {
+                wrapper[`on${event}`] = event => event.stopPropagation();
+            }
+            document.body.appendChild(wrapper);
 
             const ide = new IDE_Morph({
                 path: './lib/snap',
