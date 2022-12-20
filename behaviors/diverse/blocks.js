@@ -95,8 +95,10 @@ class BlocksEditorPawn {
         if (e.shiftKey) {
             const editor = document.getElementById("editor");
             const ide = window.world.children[0];
+            const sprite = ide.sprites.asArray().filter((morph) => morph.name === this.actor.id)[0];
             editor.style.display = "";
             ide.addMessageListener("setSizeTo", percent => this.setSize(percent));
+            ide.selectSprite(sprite);
         }
     }
 
