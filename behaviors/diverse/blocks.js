@@ -86,6 +86,12 @@ class SpriteManagerPawn {
     }
 }
 
+class BlocksEditorActor {
+    setup() {
+        this.initialScale = this.scale;
+    }
+}
+
 class BlocksEditorPawn {
     setup() {
         this.addEventListener("pointerDown", this.pointerDown.bind(this));
@@ -105,7 +111,7 @@ class BlocksEditorPawn {
     setSize(data) {
         const [id, percent] = data;
         if (id === this.actor.id) {
-            const scale = this.actor.scale.map(x => x * percent / 100);
+            const scale = this.actor.initialScale.map(x => x * percent / 100);
             this.scaleTo(scale);
         }
     }
@@ -125,6 +131,7 @@ export default {
         },
         {
             name: "BlocksEditor",
+            actorBehaviors: [BlocksEditorActor],
             pawnBehaviors: [BlocksEditorPawn]
         }
     ]
