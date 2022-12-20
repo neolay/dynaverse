@@ -5,13 +5,21 @@ export function init(Constants) {
 
     Constants.UserBehaviorDirectory = "behaviors/diverse";
     Constants.UserBehaviorModules = [
-        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "replaceWorld.js", "blocksEditor.js"
+        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "replaceWorld.js", "blocks.js"
     ];
 
     Constants.ExcludedSystemBehaviorModules = ["gizmo.js"];
     Constants.IncludedSystemBehaviorModules = ["pedestal.js"];
 
     Constants.DefaultCards = [
+        {
+            card: {
+                name: "entrance",
+                type: "object",
+                spawn: "default",
+                behaviorModules: ["BlocksGUI"],
+            }
+        },
         {
             card: {
                 name: "world model",
