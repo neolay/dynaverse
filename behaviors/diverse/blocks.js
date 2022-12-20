@@ -45,7 +45,7 @@ class BlocksGUIPawn {
             hideControls: true,
             hideCategories: true,
             noSprites: true,
-            noImports: true,
+            // noImports: true,
             noOwnBlocks: true,
             noRingify: true,
             noUserSettings: true
@@ -60,25 +60,10 @@ class BlocksGUIPawn {
     }
 }
 
-class BlocksEditorActor {
-    setup() {
-        this.startScale = this.scale;
-        this.listen("setSizeTo", this.setSize);
-    }
-
-    setSize(percent) {
-        const scale = [
-            this.startScale[0] * percent / 100,
-            this.startScale[1] * percent / 100,
-            this.startScale[2] * percent / 100
-        ];
-        this.scaleTo(scale);
-    }
-}
 
 class BlocksEditorPawn {
     setup() {
-        this.addEventListener("pointerDown", this.pointerDown);
+        this.addEventListener("pointerDown", this.pointerDown.bind(this));
     }
 
     pointerDown(e) {
@@ -86,9 +71,15 @@ class BlocksEditorPawn {
             const editor = document.getElementById("editor");
             const ide = window.world.children[0];
             editor.style.display = "";
-            ide.addMessageListener("setSizeTo", percent => this.say("setSizeTo", percent));
+            ide.addMessageListener("setSizeTo", percent => this.setSize(percent));
         }
     }
+
+    setSize(percent) {
+        const scale = this.actor.scale.map(x => x * percent / 100);
+        this.scaleTo(scale);
+    }
+
 }
 
 export default {
@@ -99,7 +90,6 @@ export default {
         },
         {
             name: "BlocksEditor",
-            actorBehaviors: [BlocksEditorActor],
             pawnBehaviors: [BlocksEditorPawn]
         }
     ]
