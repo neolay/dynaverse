@@ -60,6 +60,31 @@ class BlocksGUIPawn {
     }
 }
 
+class SpriteManagerActor {
+    setup() {
+        this.cards = this.queryCards();
+    }
+}
+
+class SpriteManagerPawn {
+    setup() {
+        this.handler = () => this.start();
+        document.addEventListener("click", this.handler);
+    }
+
+    start() {
+        const ide = window.world.children[0];
+        this.actor.cards.forEach(card => {
+            const sprite = new SpriteMorph(ide.globalVariables);
+            sprite.name = ide.newSpriteName(card.id);
+            ide.stage.add(sprite);
+            ide.sprites.add(sprite);
+            ide.corral.addSprite(sprite);
+        });
+        document.removeEventListener('click', this.handler);
+        delete this.handler;
+    }
+}
 
 class BlocksEditorPawn {
     setup() {
@@ -87,6 +112,11 @@ export default {
         {
             name: "BlocksGUI",
             pawnBehaviors: [BlocksGUIPawn],
+        },
+        {
+            name: "SpriteManager",
+            actorBehaviors: [SpriteManagerActor],
+            pawnBehaviors: [SpriteManagerPawn]
         },
         {
             name: "BlocksEditor",
