@@ -38,7 +38,7 @@ class BlocksGUIPawn {
 
         const ide = new IDE_Morph({
             path: "./lib/snap",
-            load: "./blocks/dynaverse-blocks.xml",
+            load: "./blocks/inline.xml",
             lang: "zh_CN",
             design: "flat",
             border: 1,
@@ -97,14 +97,17 @@ class BlocksEditorPawn {
             const ide = window.world.children[0];
             const sprite = ide.sprites.asArray().filter((morph) => morph.name === this.actor.id)[0];
             editor.style.display = "";
-            ide.addMessageListener("setSizeTo", percent => this.setSize(percent));
+            ide.addMessageListener("setSizeTo", data => this.setSize(data.asArray()));
             ide.selectSprite(sprite);
         }
     }
 
-    setSize(percent) {
-        const scale = this.actor.scale.map(x => x * percent / 100);
-        this.scaleTo(scale);
+    setSize(data) {
+        const [id, percent] = data;
+        if (id === this.actor.id) {
+            const scale = this.actor.scale.map(x => x * percent / 100);
+            this.scaleTo(scale);
+        }
     }
 
 }
