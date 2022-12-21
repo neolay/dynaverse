@@ -6,6 +6,7 @@ class AvatarPawn {
         this.addEventListener("pointerTap", this.pointerTap);
 
         this.addFirstResponder("pointerDown", {ctrlKey: true, altKey: true}, this);
+        this.addFirstResponder("pointerDown", {shiftKey: true}, this);
         this.addLastResponder("pointerDown", {}, this);
         this.addEventListener("pointerDown", this.pointerDown);
 
@@ -37,6 +38,7 @@ class AvatarPawn {
         this.removeEventListener("pointerTap", this.pointerTap);
 
         this.removeFirstResponder("pointerDown", {ctrlKey: true, altKey: true}, this);
+        this.removeFirstResponder("pointerDown", {shiftKey: true}, this);
         this.removeLastResponder("pointerDown", {}, this);
         this.removeEventListener("pointerDown", this.pointerDown);
 
