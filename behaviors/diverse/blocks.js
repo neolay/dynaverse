@@ -111,12 +111,12 @@ class BlocksEditorPawn {
     }
 
     tick(){
-        let spriteName = `${this.name}-${this.id}`;
+        let spriteName = `${this.actor.name}-${this.actor.id}`;
         // Make sure world already exists
         if (window.world){
             let ide = window.world.children[0];
             // List from Snap! list.js
-            let payload = new List([spriteName, new List(this.translation), new List(this.rotation), new List(this.scale)]);
+            let payload = new List([spriteName, new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)]);
             ide.broadcast("updateCardData", null, payload);
         }
         // sent together will cause overwriting. This is a temporary solution
