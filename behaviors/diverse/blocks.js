@@ -76,7 +76,8 @@ class SpriteManagerPawn {
         const ide = window.world.children[0];
         this.actor.cards.forEach(card => {
             const sprite = new SpriteMorph(ide.globalVariables);
-            sprite.name = ide.newSpriteName(card.id);
+            const spriteName = `${card.name}-${card.id}`;
+            sprite.name = ide.newSpriteName(spriteName);
             ide.stage.add(sprite);
             ide.sprites.add(sprite);
             ide.corral.addSprite(sprite);
@@ -101,7 +102,8 @@ class BlocksEditorPawn {
         if (e.shiftKey) {
             const editor = document.getElementById("editor");
             const ide = window.world.children[0];
-            const sprite = ide.sprites.asArray().filter((morph) => morph.name === this.actor.id)[0];
+            const spriteName = `${this.actor.name}-${this.actor.id}`;
+            const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
             editor.style.display = "";
             ide.addMessageListener("setSizeTo", data => this.setSize(data.asArray()));
             ide.selectSprite(sprite);
@@ -110,7 +112,8 @@ class BlocksEditorPawn {
 
     setSize(data) {
         const [id, percent] = data;
-        if (id === this.actor.id) {
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (id === spriteName) {
             const scale = this.actor.initialScale.map(x => x * percent / 100);
             this.scaleTo(scale);
         }
