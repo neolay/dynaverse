@@ -105,8 +105,19 @@ class BlocksEditorPawn {
             const spriteName = `${this.actor.name}-${this.actor.id}`;
             const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
             editor.style.display = "";
-            ide.addMessageListener("setSizeTo", data => this.setSize(data.asArray()));
+            ide.addMessageListener("setPropertyTo", data => this.setPropertyTo(data));
             ide.selectSprite(sprite);
+        }
+    }
+
+    setPropertyTo(data){
+        // data: list(spriteName, property, args)
+        const [spriteNameFromSnap, property, argsData] = data.asArray();
+        const args = argsData.asArray(); // array
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        debugger;
+        if (spriteNameFromSnap === spriteName) {
+            this.set({[property]: args}); 
         }
     }
 
