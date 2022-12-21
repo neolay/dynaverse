@@ -115,12 +115,11 @@ class BlocksEditorPawn {
         const [spriteNameFromSnap, property, argsData] = data.asArray();
         const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
-        debugger;
         if (spriteNameFromSnap === spriteName) {
             this.set({[property]: args}); 
         }
     }
-    
+
 }
 
 export default {
