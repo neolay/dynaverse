@@ -56,7 +56,6 @@ export function init(Constants) {
                 rotation: [0, 0.042575427635536914, 0, 0.9990932553879298],
                 dataScale: [2.5, 2.5, 2.5],
                 shadow: true,
-                behaviorModules: ["BlocksEditor"],
             }
         },
         {
@@ -125,7 +124,7 @@ export function init(Constants) {
                 translation: [-7.066189321712586, -0.4259831336397919, -10.00003322547244],
                 rotation: [0, 0.4153962766047525, 0, 0.9096405517471765],
                 scale: [2, 2, 2],
-                behaviorModules: ["Text3D", "BlocksEditor"],
+                behaviorModules: ["Text3D"],
                 shadow: true,
             }
         },
@@ -143,7 +142,6 @@ export function init(Constants) {
                 cornerRadius: 0.05,
                 depth: 0.05,
                 shadow: true,
-                behaviorModules: ["BlocksEditor"],
             }
         },
     ];

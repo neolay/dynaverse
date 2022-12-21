@@ -56,6 +56,7 @@ class BlocksGUIPawn {
         };
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
+        ide.addMessageListener("setPropertyTo", data => this.publish("blocks", "setPropertyTo", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -82,46 +83,30 @@ class SpriteManagerPawn {
             ide.sprites.add(sprite);
             ide.corral.addSprite(sprite);
         });
-        document.removeEventListener('click', this.handler);
+        document.removeEventListener("click", this.handler);
         delete this.handler;
     }
 }
 
-class BlocksEditorActor {
-    setup() {
-        this.initialScale = this.scale;
-    }
-}
-
 class BlocksEditorPawn {
-    setup() {
-        this.addEventListener("pointerDown", this.pointerDown.bind(this));
+    setEditor() {
+        this.subscribe("blocks", "setPropertyTo", this.setPropertyTo);
+
+        const editor = document.getElementById("editor");
+        const ide = window.world.children[0];
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
+        ide.selectSprite(sprite);
+        editor.style.display = "";
     }
 
-    pointerDown(e) {
-        if (e.shiftKey) {
-            const editor = document.getElementById("editor");
-            const ide = window.world.children[0];
-            const spriteName = `${this.actor.name}-${this.actor.id}`;
-            const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
-            editor.style.display = "";
-            ide.addMessageListener("setPropertyTo", data => this.setPropertyTo(data));
-            ide.selectSprite(sprite);
-        } else {
-            const ide = window.world.children[0];
-            let message = 'click';
-            // broadcast to Snap
-            ide.broadcast(message);
-        }
-    }
-
-    setPropertyTo(data){
+    setPropertyTo(data) {
         // data: list(spriteName, property, args)
-        const [spriteNameFromSnap, property, argsData] = data.asArray();
+        const [spriteNameFromSnap, property, argsData] = data;
         const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         if (spriteNameFromSnap === spriteName) {
-            this.set({[property]: args}); 
+            this.set({[property]: args});
         }
     }
 
@@ -140,7 +125,6 @@ export default {
         },
         {
             name: "BlocksEditor",
-            actorBehaviors: [BlocksEditorActor],
             pawnBehaviors: [BlocksEditorPawn]
         }
     ]
