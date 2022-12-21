@@ -111,9 +111,9 @@ class BlocksEditorPawn {
     }
 
     setSize(data) {
-        const [id, percent] = data;
+        const [spriteNameFromSnap, percent] = data;
         const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (id === spriteName) {
+        if (spriteNameFromSnap === spriteName) {
             const scale = this.actor.initialScale.map(x => x * percent / 100);
             this.scaleTo(scale);
         }
