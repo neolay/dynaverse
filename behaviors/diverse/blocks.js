@@ -88,6 +88,23 @@ class SpriteManagerPawn {
     }
 }
 
+class BlocksEditorActor {
+
+    tick(){
+        let spriteName = `${this.name}-${this.id}`;
+        // Make sure world already exists
+        if (window.world){
+            let ide = window.world.children[0];
+            // List from Snap! list.js
+            let payload = new List([spriteName, new List(this.translation), new List(this.rotation), new List(this.scale)]);
+            ide.broadcast("updateCardData", null, payload);
+        }
+        // sent together will cause overwriting. This is a temporary solution
+        this.future(20 + 20 * this.random()).tick();
+    }
+    
+}
+
 class BlocksEditorPawn {
     setEditor() {
         this.subscribe("blocks", "setPropertyTo", this.setPropertyTo);
@@ -125,6 +142,7 @@ export default {
         },
         {
             name: "BlocksEditor",
+            actorBehaviors: [BlocksEditorActor],
             pawnBehaviors: [BlocksEditorPawn]
         }
     ]
