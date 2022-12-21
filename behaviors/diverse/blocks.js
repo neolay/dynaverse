@@ -63,7 +63,7 @@ class BlocksGUIPawn {
 
 class SpriteManagerActor {
     setup() {
-        this.cards = this.queryCards();
+        this.cards = this.queryCards().filter(card => card.layers.includes("pointer"));
     }
 }
 
