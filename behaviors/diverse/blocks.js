@@ -105,17 +105,18 @@ class BlocksEditorPawn {
             const spriteName = `${this.actor.name}-${this.actor.id}`;
             const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
             editor.style.display = "";
-            ide.addMessageListener("setSizeTo", data => this.setSize(data.asArray()));
+            ide.addMessageListener("setPropertyTo", data => this.setPropertyTo(data));
             ide.selectSprite(sprite);
         }
     }
 
-    setSize(data) {
-        const [spriteNameFromSnap, percent] = data;
+    setPropertyTo(data){
+        // data: list(spriteName, property, args)
+        const [spriteNameFromSnap, property, argsData] = data.asArray();
+        const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         if (spriteNameFromSnap === spriteName) {
-            const scale = this.actor.initialScale.map(x => x * percent / 100);
-            this.scaleTo(scale);
+            this.set({[property]: args}); 
         }
     }
 
