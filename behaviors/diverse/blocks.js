@@ -107,6 +107,11 @@ class BlocksEditorPawn {
             editor.style.display = "";
             ide.addMessageListener("setPropertyTo", data => this.setPropertyTo(data));
             ide.selectSprite(sprite);
+        } else {
+            const ide = window.world.children[0];
+            let message = 'click';
+            // broadcast to Snap
+            ide.broadcast(message);
         }
     }
 
