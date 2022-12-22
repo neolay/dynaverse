@@ -42,7 +42,7 @@ class BlocksGUIPawn {
             lang: "zh_CN",
             design: "flat",
             border: 1,
-            hideControls: true,
+            // hideControls: true,
             hideCategories: true,
             noSprites: true,
             // noImports: true,
@@ -107,7 +107,14 @@ class BlocksEditorPawn {
         const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         if (spriteNameFromSnap === spriteName) {
+
+            if (args.length > 0 && args[0] === "q_euler") {
+                this.set({[property]: Microverse.q_euler(args[1], args[2], args[3])});
+                return
+            }
+            
             this.set({[property]: args});
+            
         }
     }
 
