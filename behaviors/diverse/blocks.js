@@ -18,8 +18,8 @@ class BlocksGUIPawn {
                 background-color: rgba(0, 0, 0, 0.5);
                 display: none;">
                 <button id="close-editor-button" type="button" class="btn btn-danger btn-x topleft">x</button>
-                <p style="font-size: 12px; margin: 0;">Snap<em>!</em></p>
-                <canvas id="snap" tabindex="1" width="450" height="600"></canvas>
+                <p style="font-size: 12px; margin: 0;">DynaverseBlocks</p>
+                <canvas id="snap" tabindex="1" width="585" height="600"></canvas>
             </div>`;
         const wrapper = div.firstChild;
         for (const event of ["keydown", "keyup",
@@ -48,7 +48,14 @@ class BlocksGUIPawn {
             // noImports: true,
             noOwnBlocks: true,
             noRingify: true,
-            noUserSettings: true
+            noUserSettings: true,
+            categories: [
+                "looks",
+                "control",
+                "sensing",
+                "operators",
+                "variables",
+            ]
         });
         const loop = () => {
             requestAnimationFrame(loop);
@@ -82,7 +89,7 @@ class SpriteManagerPawn {
             ide.stage.add(sprite);
             ide.sprites.add(sprite);
             ide.corral.addSprite(sprite);
-            sprite.variables.addVar('_ActorData');
+            sprite.variables.addVar("_ActorData");
         });
         document.removeEventListener("click", this.handler);
         delete this.handler;
@@ -112,16 +119,16 @@ class BlocksEditorPawn {
                 this.set({[property]: Microverse.q_euler(args[1], args[2], args[3])});
                 return
             }
-            
+
             this.set({[property]: args});
-            
+
         }
     }
 
-    tick(){
+    tick() {
         let spriteName = `${this.actor.name}-${this.actor.id}`;
         // Make sure world already exists
-        if (window.world){
+        if (window.world) {
             let ide = window.world.children[0];
             // List from Snap! list.js
             let payload = new List([spriteName, new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)]);
@@ -131,13 +138,13 @@ class BlocksEditorPawn {
         this.future(20 + 20 * this.random()).tick();
     }
 
-    broadcastClick(){
-        if (window.world){
+    broadcastClick() {
+        if (window.world) {
             const ide = window.world.children[0];
             let spriteName = `${this.actor.name}-${this.actor.id}`;
             let payload = new List([spriteName]);
             // broadcast to Snap
-            ide.broadcast('click', null, payload); // todo send to Sprite
+            ide.broadcast("click", null, payload); // todo send to Sprite
         }
     }
 
