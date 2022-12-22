@@ -131,6 +131,16 @@ class BlocksEditorPawn {
         this.future(20 + 20 * this.random()).tick();
     }
 
+    broadcastClick(){
+        if (window.world){
+            const ide = window.world.children[0];
+            let spriteName = `${this.actor.name}-${this.actor.id}`;
+            let payload = new List([spriteName]);
+            // broadcast to Snap
+            ide.broadcast('click', null, payload); // todo send to Sprite
+        }
+    }
+
 }
 
 export default {
