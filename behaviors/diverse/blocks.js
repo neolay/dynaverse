@@ -36,10 +36,9 @@ class BlocksGUIPawn {
             editor.style.display = "none";
         }
 
-        const ide = new IDE_Morph({
+        const config = {
             path: "./lib/snap",
             load: "./blocks/inline.xml",
-            lang: "zh_CN",
             design: "flat",
             border: 1,
             // hideControls: true,
@@ -56,7 +55,12 @@ class BlocksGUIPawn {
                 "operators",
                 "variables",
             ]
-        });
+        }
+        const lang = this.actor._cardData.lang;
+        if (lang) {
+            config.lang = lang;
+        }
+        const ide = new IDE_Morph(config);
         const loop = () => {
             requestAnimationFrame(loop);
             window.world.doOneCycle();

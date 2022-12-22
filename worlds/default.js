@@ -18,6 +18,7 @@ export function init(Constants) {
                 type: "object",
                 spawn: "default",
                 behaviorModules: ["BlocksGUI", "SpriteManager"],
+                lang: "zh_CN",
             }
         },
         {
