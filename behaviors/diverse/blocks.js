@@ -43,7 +43,7 @@ class BlocksGUIPawn {
             design: "flat",
             border: 1,
             // hideControls: true,
-            hideCategories: true,
+            // hideCategories: true,
             noSprites: true,
             // noImports: true,
             noOwnBlocks: true,
