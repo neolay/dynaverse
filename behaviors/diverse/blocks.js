@@ -64,6 +64,7 @@ class BlocksGUIPawn {
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
         ide.addMessageListener("setPropertyTo", data => this.publish("blocks", "setPropertyTo", data.asArray()));
+        ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data));
         requestAnimationFrame(loop);
     }
 }
@@ -99,6 +100,7 @@ class SpriteManagerPawn {
 class BlocksEditorPawn {
     setEditor() {
         this.subscribe("blocks", "setPropertyTo", this.setPropertyTo);
+        this.subscribe("blocks", "scaleTo", this._scaleTo);
 
         const editor = document.getElementById("editor");
         const ide = window.world.children[0];
@@ -114,15 +116,17 @@ class BlocksEditorPawn {
         const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         if (spriteNameFromSnap === spriteName) {
-
             if (args.length > 0 && args[0] === "q_euler") {
                 this.set({[property]: Microverse.q_euler(args[1], args[2], args[3])});
                 return
             }
-
             this.set({[property]: args});
-
         }
+    }
+
+    _scaleTo(data) {
+        const scale = this.actor._initialData.scale.map(x => x * data / 100);
+        this.scaleTo(scale);
     }
 
     tick() {
