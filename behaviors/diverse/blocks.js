@@ -82,6 +82,7 @@ class SpriteManagerPawn {
             ide.stage.add(sprite);
             ide.sprites.add(sprite);
             ide.corral.addSprite(sprite);
+            sprite.variables.addVar('_ActorData');
         });
         document.removeEventListener("click", this.handler);
         delete this.handler;
@@ -117,7 +118,7 @@ class BlocksEditorPawn {
             let ide = window.world.children[0];
             // List from Snap! list.js
             let payload = new List([spriteName, new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)]);
-            ide.broadcast("updateCardData", null, payload);
+            ide.broadcast("updateActorData", null, payload);
         }
         // sent together will cause overwriting. This is a temporary solution
         this.future(20 + 20 * this.random()).tick();
