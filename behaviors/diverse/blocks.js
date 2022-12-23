@@ -82,23 +82,39 @@ class SpriteManagerActor {
 
 class SpriteManagerPawn {
     setup() {
+        this.subscribe("removeSprite", "removeSprite", this.removeSprite);
         this.handler = () => this.start();
         document.addEventListener("click", this.handler);
     }
 
     start() {
         const ide = window.world.children[0];
-        this.actor.cards.forEach(card => {
-            const sprite = new SpriteMorph(ide.globalVariables);
-            const spriteName = `${card.name}-${card.id}`;
-            sprite.name = ide.newSpriteName(spriteName);
-            ide.stage.add(sprite);
-            ide.sprites.add(sprite);
-            ide.corral.addSprite(sprite);
-            sprite.variables.addVar("_ActorData");
-        });
+        if (ide) {
+            this.actor.cards.forEach(card => {
+                const sprite = new SpriteMorph(ide.globalVariables);
+                const spriteName = `${card.name}-${card.id}`;
+                sprite.name = ide.newSpriteName(spriteName);
+                ide.stage.add(sprite);
+                ide.sprites.add(sprite);
+                ide.corral.addSprite(sprite);
+                sprite.variables.addVar("_ActorData");
+            });
+        }
         document.removeEventListener("click", this.handler);
         delete this.handler;
+    }
+
+    removeSprite(data) {
+        const ide = window.world.children[0];
+        if (ide) {
+            ide.sprites.asArray().forEach(morph => {
+                if (morph.name === data) {
+                    const editor = document.getElementById("editor");
+                    editor.style.display = "none";
+                    ide.removeSprite(morph);
+                }
+            });
+        }
     }
 }
 
@@ -165,7 +181,6 @@ class BlocksEditorPawn {
             ide.broadcast("click", null, payload); // todo send to Sprite
         }
     }
-
 }
 
 export default {
