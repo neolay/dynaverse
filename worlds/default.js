@@ -5,7 +5,7 @@ export function init(Constants) {
 
     Constants.UserBehaviorDirectory = "behaviors/diverse";
     Constants.UserBehaviorModules = [
-        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "replaceWorld.js", "blocks.js"
+        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "blocks.js"
     ];
 
     Constants.ExcludedSystemBehaviorModules = ["gizmo.js"];
@@ -18,7 +18,7 @@ export function init(Constants) {
                 type: "object",
                 spawn: "default",
                 behaviorModules: ["BlocksGUI", "SpriteManager"],
-                lang: "zh_CN",
+                // lang: "zh_CN"
             }
         },
         {
@@ -49,18 +49,6 @@ export function init(Constants) {
         },
         {
             card: {
-                name: "scratch cat",
-                type: "3d",
-                dataLocation: "./assets/3D/scratch_cat.glb.zip",
-                layers: ["pointer"],
-                translation: [-2.973275739954604, -0.746324277905422, -8],
-                rotation: [0, 0.042575427635536914, 0, 0.9990932553879298],
-                dataScale: [2.5, 2.5, 2.5],
-                shadow: true,
-            }
-        },
-        {
-            card: {
                 name: "dynalab",
                 translation: [-12.1, 1.5, -10.18],
                 rotation: [0, Math.PI / 2, 0],
@@ -84,11 +72,11 @@ export function init(Constants) {
                 type: "3d",
                 dataLocation: "./assets/3D/windmill.glb.zip",
                 layers: ["pointer"],
-                translation: [3.353431584172484, 0.32, -10],
-                rotation: [-0.7063054944928459, 0.03365335717601678, 0.7063054944928457, 0.033653357176016786],
+                translation: [2.8700464783328092, 0.3353000862885606, -10],
+                rotation: [0.14204542629682113, 0.6926926424238634, -0.1420454262968211, 0.6926926424238635],
                 dataScale: [0.7, 0.7, 0.7],
                 shadow: true,
-                behaviorModules: ["SimpleSpin"],
+                // behaviorModules: ["SimpleSpin"],
             }
         },
         {
@@ -145,5 +133,21 @@ export function init(Constants) {
                 shadow: true,
             }
         },
+        {
+            card: {
+                name: "heart",
+                translation: [-3.2923719590754903, -0.6135479654834599, -10],
+                scale: [1, 1, 1],
+                rotation: [0, 0.22751997615512262, 0, 0.9737734133002258],
+                layers: ["pointer"],
+                dataLocation: "3Kl2Rl7pX7CI02-9odYVozxQNAF8W1wElG9a1MT4fRCMIz8_OzhxZGQtIicuOGU-OGUoOSQ6Pi4_ZSIkZD5kDC8dKTInAjgKIBooCRMveAwzKj0yPB4AHBISeWQiJGUoOSQ6Pi4_ZSYiKDkkPS45OC5kLyIHGAwpAjl-Zn8YPwARew4RA3sHfiR-L31-BRM-JAQPf3MyBnwyOwEHe2QvKj8qZHsgLwk7fCATAxoELBIIDQckHWYsLAoCASc_fnICJw59AjghPzk_BSIteBI",
+                dataScale: [0.3, 0.3, 0.3],
+                fileName: "heart.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        }
     ];
 }
