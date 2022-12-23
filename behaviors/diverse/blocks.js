@@ -111,8 +111,10 @@ class BlocksEditorPawn {
         const ide = window.world.children[0];
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
-        ide.selectSprite(sprite);
-        editor.style.display = "";
+        if (sprite) {
+            ide.selectSprite(sprite);
+            editor.style.display = "";
+        }
     }
 
     setPropertyTo(data) {
