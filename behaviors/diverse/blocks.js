@@ -68,7 +68,7 @@ class BlocksGUIPawn {
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
         ide.addMessageListener("setPropertyTo", data => this.publish("blocks", "setPropertyTo", data.asArray()));
-        ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data));
+        ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -129,8 +129,12 @@ class BlocksEditorPawn {
     }
 
     _scaleTo(data) {
-        const scale = this.actor._initialData.scale.map(x => x * data / 100);
-        this.scaleTo(scale);
+        const [spriteNameFromSnap, percent] = data;
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (spriteNameFromSnap === spriteName) {
+            const scale = this.actor._initialData.scale.map(x => x * percent / 100);
+            this.scaleTo(scale);
+        }
     }
 
     tick() {
