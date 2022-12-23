@@ -147,7 +147,7 @@ class BlocksEditorPawn {
             ide.broadcast("updateActorData", null, payload);
         }
         // sent together will cause overwriting. This is a temporary solution
-        this.future(20 + 20 * this.random()).tick();
+        this.future(200 + 20 * this.random()).tick();
     }
 
     broadcastClick() {
