@@ -1,5 +1,5 @@
 # Dynaverse Experimental
-#### Dynaverse now is a set of Microverse worlds to help and encourage kids to explore the world of programming in Metaverse that comprise the Snap<em>!</em> interface for creating and running card's scripts.
+#### Dynaverse at the present stage is a set of Microverse worlds to help and encourage kids to explore the world of programming in Metaverse that comprise the Snap<em>!</em> interface for creating and running card's scripts.
 
 ## Installation
 
@@ -38,6 +38,9 @@ Open a Command Prompt or Terminal in the dynaverse repository and run:
 npm start
 ```
 Then go to [http://localhost:9684/](http://localhost:9684/)
+
+## Blocks Editor
+When you click on a card while the shift key pressed down, you get a blocks editor of the card. Enjoy it!
 
 ## Worlds List
 - [http://localhost:9684?world=showblocks](http://localhost:9684?world=showblocks)
