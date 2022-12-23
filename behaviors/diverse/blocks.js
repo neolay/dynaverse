@@ -45,7 +45,7 @@ class BlocksGUIPawn {
             // hideCategories: true,
             noSprites: true,
             // noImports: true,
-            noOwnBlocks: true,
+            // noOwnBlocks: true,
             noRingify: true,
             noUserSettings: true,
             categories: [
@@ -143,6 +143,9 @@ class BlocksEditorPawn {
         if (window.world) {
             let ide = window.world.children[0];
             // List from Snap! list.js
+            // List([spriteName, List(translation Vector3), List(rotation Quaternion), List(scale Vector3) ])
+            // type Vector3 = [<number>, <number, <number>]
+            // type Quaternion = [<number>, <number, <number>, <number>]
             let payload = new List([spriteName, new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)]);
             ide.broadcast("updateActorData", null, payload);
         }
