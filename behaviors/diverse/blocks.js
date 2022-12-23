@@ -49,6 +49,7 @@ class BlocksGUIPawn {
             noRingify: true,
             noUserSettings: true,
             categories: [
+                "motion",
                 "looks",
                 "control",
                 "sensing",
