@@ -68,7 +68,8 @@ class BlocksGUIPawn {
         };
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
-        ide.addMessageListener("setPropertyTo", data => this.publish("blocks", "setPropertyTo", data.asArray()));
+        ide.addMessageListener("_setPropertyTo", data => this.publish("blocks", "_setPropertyTo", data.asArray()));
+        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
         ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
         requestAnimationFrame(loop);
     }
@@ -97,7 +98,6 @@ class SpriteManagerPawn {
                 ide.stage.add(sprite);
                 ide.sprites.add(sprite);
                 ide.corral.addSprite(sprite);
-                sprite.variables.addVar("_ActorData");
             });
         }
         document.removeEventListener("click", this.handler);
@@ -120,7 +120,8 @@ class SpriteManagerPawn {
 
 class BlocksEditorPawn {
     setEditor() {
-        this.subscribe("blocks", "setPropertyTo", this.setPropertyTo);
+        this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
+        this.subscribe("blocks", "_queryActorData", this._queryActorData);
         this.subscribe("blocks", "scaleTo", this._scaleTo);
 
         const editor = document.getElementById("editor");
@@ -133,7 +134,7 @@ class BlocksEditorPawn {
         }
     }
 
-    setPropertyTo(data) {
+    _setPropertyTo(data) {
         // data: list(spriteName, property, args)
         const [spriteNameFromSnap, property, argsData] = data;
         const args = argsData.asArray();
@@ -147,6 +148,15 @@ class BlocksEditorPawn {
         }
     }
 
+    _queryActorData(data){
+        // use message_id(globally unique), no need to specify spriteName
+        // debugger;
+        const message_id = data[0];
+        let ide = window.world.children[0];
+        let payload = new List([message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
+        ide.broadcast("_responseToReporter", null, payload);
+    }
+
     _scaleTo(data) {
         const [spriteNameFromSnap, percent] = data;
         const spriteName = `${this.actor.name}-${this.actor.id}`;
@@ -157,19 +167,7 @@ class BlocksEditorPawn {
     }
 
     tick() {
-        let spriteName = `${this.actor.name}-${this.actor.id}`;
-        // Make sure world already exists
-        if (window.world) {
-            let ide = window.world.children[0];
-            // List from Snap! list.js
-            // List([spriteName, List(translation Vector3), List(rotation Quaternion), List(scale Vector3) ])
-            // type Vector3 = [<number>, <number, <number>]
-            // type Quaternion = [<number>, <number, <number>, <number>]
-            let payload = new List([spriteName, new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)]);
-            ide.broadcast("updateActorData", null, payload);
-        }
-        // sent together will cause overwriting. This is a temporary solution
-        this.future(200 + 20 * this.random()).tick();
+        //
     }
 
     broadcastClick() {
