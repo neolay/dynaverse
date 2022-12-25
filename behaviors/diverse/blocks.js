@@ -69,8 +69,8 @@ class BlocksGUIPawn {
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
         ide.addMessageListener("_setPropertyTo", data => this.publish("blocks", "_setPropertyTo", data.asArray()));
-        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
         ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
+        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -121,8 +121,8 @@ class SpriteManagerPawn {
 class BlocksEditorPawn {
     setEditor() {
         this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
-        this.subscribe("blocks", "_queryActorData", this._queryActorData);
         this.subscribe("blocks", "scaleTo", this._scaleTo);
+        this.subscribe("blocks", "_queryActorData", this._queryActorData);
 
         const editor = document.getElementById("editor");
         const ide = window.world.children[0];
@@ -148,15 +148,6 @@ class BlocksEditorPawn {
         }
     }
 
-    _queryActorData(data){
-        // use message_id(globally unique), no need to specify spriteName
-        // debugger;
-        const message_id = data[0];
-        let ide = window.world.children[0];
-        let payload = new List([message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
-        ide.broadcast("_responseToReporter", null, payload);
-    }
-
     _scaleTo(data) {
         const [spriteNameFromSnap, percent] = data;
         const spriteName = `${this.actor.name}-${this.actor.id}`;
@@ -164,6 +155,15 @@ class BlocksEditorPawn {
             const scale = this.actor._initialData.scale.map(x => x * percent / 100);
             this.scaleTo(scale);
         }
+    }
+
+    _queryActorData(data){
+        // use message_id(globally unique), no need to specify spriteName
+        // debugger;
+        const message_id = data[0];
+        let ide = window.world.children[0];
+        let payload = new List([message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
+        ide.broadcast("_responseToReporter", null, payload);
     }
 
     tick() {
