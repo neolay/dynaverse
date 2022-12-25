@@ -71,6 +71,7 @@ class BlocksGUIPawn {
         ide.addMessageListener("_setPropertyTo", data => this.publish("blocks", "_setPropertyTo", data.asArray()));
         ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
         ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
+        ide.addMessageListener("_blockSay", data => this.publish("_blockSay", "_blockSay", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -123,6 +124,7 @@ class BlocksEditorPawn {
         this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
         this.subscribe("blocks", "scaleTo", this._scaleTo);
         this.subscribe("blocks", "_queryActorData", this._queryActorData);
+        this.subscribe("_blockSay", "_blockSay", this._blockSay);
 
         const editor = document.getElementById("editor");
         const ide = window.world.children[0];
@@ -164,6 +166,15 @@ class BlocksEditorPawn {
         let ide = window.world.children[0];
         let payload = new List([message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
         ide.broadcast("_responseToReporter", null, payload);
+    }
+
+    _blockSay(data){
+        const [spriteNameFromSnap, eventName, argsData] = data;
+        const args = argsData.asArray();
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (spriteNameFromSnap === spriteName) {
+            this.say(eventName, args);
+        }
     }
 
     tick() {
