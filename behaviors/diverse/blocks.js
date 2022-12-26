@@ -75,6 +75,7 @@ class BlocksGUIPawn {
         ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
         ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
         ide.addMessageListener("_blockSay", data => this.publish("_blockSay", "_blockSay", data.asArray()));
+        ide.addMessageListener("_snapBubbleSay", data => this.publish("blocks", "_snapBubbleSay", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -128,6 +129,7 @@ class BlocksEditorPawn {
         this.subscribe("blocks", "scaleTo", this._scaleTo);
         this.subscribe("blocks", "_queryActorData", this._queryActorData);
         this.subscribe("_blockSay", "_blockSay", this._blockSay);
+        this.subscribe("blocks", "_snapBubbleSay", this._snapBubbleSay);
 
         const editor = document.getElementById("editor");
         const tag = document.getElementById("card-tag");
@@ -182,8 +184,13 @@ class BlocksEditorPawn {
         }
     }
 
-    tick() {
-        //
+    _snapBubbleSay(data) {
+        const [spriteNameFromSnap, argsData] = data;
+        const args = argsData.asArray();
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (spriteNameFromSnap === spriteName) {
+            this.say("_bubbleSay", args);
+        }
     }
 
     broadcastClick() {
@@ -195,6 +202,7 @@ class BlocksEditorPawn {
             ide.broadcast("click", null, payload); // todo send to Sprite
         }
     }
+
 }
 
 export default {
