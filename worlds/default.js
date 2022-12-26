@@ -5,7 +5,7 @@ export function init(Constants) {
 
     Constants.UserBehaviorDirectory = "behaviors/diverse";
     Constants.UserBehaviorModules = [
-        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "blocks.js"
+        "lights.js", "sound.js", "throb.js", "urlLink.js", "bounce.js", "simpleSpin.js", "text3D.js", "graphing.js", "blocks.js"
     ];
 
     Constants.ExcludedSystemBehaviorModules = ["gizmo.js"];
@@ -148,6 +148,97 @@ export function init(Constants) {
                 singleSided: true,
                 type: "3d",
             }
-        }
+        },
+        {
+            card: {
+            name: "line graphs background",
+            translation: [11.914606500892997, 0.4, -1],
+            rotation: [0, -Math.PI / 2, 0],
+            scale: [2, 2, 2],
+            className: "TextFieldActor",
+            type: "text",
+            layers: ["pointer"],
+            color: 0xFFFFFF,
+            backgroundColor: 0x202020,
+            frameColor: 0x202020,
+            width: 1.1,
+            height: 1.2,
+            depth: 0.05,
+            margins: {bottom: 20, left: 20, right: 20, top: 20},
+            runs: [{ text: "tilt x\n\n\n\ntilt y\n\n\n\ntilt z"}],
+            textScale: 0.002,
+            },
+            id: "linegraphs",
+        },
+        {
+            card: {
+                name: "yellow line graph",
+                translation: [0, -0.5, 0.05],
+                height: 0.2,
+                color: 0xffff00,
+                generateValues: {min: 0, max: 100, tick: 100},
+                length: 20,
+                behaviorModules: ["Values", "LineGraph"],
+                parent: "linegraphs",
+            },
+        },
+        {
+            card: {
+                name: "cyan line graph",
+                translation: [0, -0.1, 0.05],
+                height: 0.2,
+                color: 0x00ffff,
+                generateValues: {min: 0, max: 100, tick: 100},
+                length: 20,
+                behaviorModules: ["Values", "LineGraph"],
+                parent: "linegraphs",
+            },
+        },
+        {
+            card: {
+                name: "magenta line graph",
+                translation: [0, 0.3, 0.05],
+                height: 0.2,
+                color: 0xff00ff,
+                generateValues: {min: 0, max: 100, tick: 100},
+                length: 20,
+                behaviorModules: ["Values", "LineGraph"],
+                parent: "linegraphs",
+            },
+        },
+        {
+            card: {
+                name: "bar graph background",
+                translation: [11.914606500892997, 0.4, 2],
+                rotation: [0, -Math.PI / 2, 0],
+                scale: [2, 2, 2],
+                className: "TextFieldActor",
+                type: "text",
+                layers: ["pointer"],
+                color: 0xFFFFFF,
+                backgroundColor: 0x202020,
+                frameColor: 0x202020,
+                width: 1.1,
+                height: 1.2,
+                depth: 0.05,
+                margins: {bottom: 20,left: 20,right: 20,top: 20},
+                runs: [{text: "Power"}],
+                textScale: 0.002,
+            },
+            id: "bargraph"
+        },
+        {
+            card: {
+                name: "bar graph",
+                translation: [0, -0.5, 0.05],
+                width: 2,
+                height: 1,
+                color: 0x008000,
+                generateValues: {min: 0, max: 100, tick: 100},
+                length: 20,
+                behaviorModules: ["Values", "BarGraph"],
+                parent: "bargraph",
+            },
+        },
     ];
 }
