@@ -69,8 +69,9 @@ class BlocksGUIPawn {
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
         ide.addMessageListener("_setPropertyTo", data => this.publish("blocks", "_setPropertyTo", data.asArray()));
-        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
         ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
+        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
+        ide.addMessageListener("_blockSay", data => this.publish("_blockSay", "_blockSay", data.asArray()));
         requestAnimationFrame(loop);
     }
 }
@@ -121,8 +122,9 @@ class SpriteManagerPawn {
 class BlocksEditorPawn {
     setEditor() {
         this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
-        this.subscribe("blocks", "_queryActorData", this._queryActorData);
         this.subscribe("blocks", "scaleTo", this._scaleTo);
+        this.subscribe("blocks", "_queryActorData", this._queryActorData);
+        this.subscribe("_blockSay", "_blockSay", this._blockSay);
 
         const editor = document.getElementById("editor");
         const ide = window.world.children[0];
@@ -148,6 +150,15 @@ class BlocksEditorPawn {
         }
     }
 
+    _scaleTo(data) {
+        const [spriteNameFromSnap, percent] = data;
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (spriteNameFromSnap === spriteName) {
+            const scale = this.actor._initialData.scale.map(x => x * percent / 100);
+            this.scaleTo(scale);
+        }
+    }
+
     _queryActorData(data){
         // use message_id(globally unique), no need to specify spriteName
         // debugger;
@@ -157,12 +168,12 @@ class BlocksEditorPawn {
         ide.broadcast("_responseToReporter", null, payload);
     }
 
-    _scaleTo(data) {
-        const [spriteNameFromSnap, percent] = data;
+    _blockSay(data){
+        const [spriteNameFromSnap, eventName, argsData] = data;
+        const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         if (spriteNameFromSnap === spriteName) {
-            const scale = this.actor._initialData.scale.map(x => x * percent / 100);
-            this.scaleTo(scale);
+            this.say(eventName, args);
         }
     }
 
