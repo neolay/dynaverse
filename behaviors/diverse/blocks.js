@@ -18,7 +18,10 @@ class BlocksGUIPawn {
                 background-color: rgba(0, 0, 0, 0.5);
                 display: none;">
                 <button id="close-editor-button" type="button" class="btn btn-danger btn-x topleft">x</button>
-                <p style="font-size: 12px; margin: 0;">DynaverseBlocks</p>
+                <p style="font-size: 12px; margin: 0; text-align: center;">
+                <span>DynaverseBlocks</span>
+                <span id="card-tag"></span>
+                </p>
                 <canvas id="snap" tabindex="1" width="585" height="600"></canvas>
             </div>`;
         const wrapper = div.firstChild;
@@ -127,11 +130,13 @@ class BlocksEditorPawn {
         this.subscribe("_blockSay", "_blockSay", this._blockSay);
 
         const editor = document.getElementById("editor");
+        const tag = document.getElementById("card-tag");
         const ide = window.world.children[0];
         const spriteName = `${this.actor.name}-${this.actor.id}`;
         const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
         if (sprite) {
             ide.selectSprite(sprite);
+            tag.textContent = ` - ${spriteName}`;
             editor.style.display = "";
         }
     }
@@ -159,7 +164,7 @@ class BlocksEditorPawn {
         }
     }
 
-    _queryActorData(data){
+    _queryActorData(data) {
         // use message_id(globally unique), no need to specify spriteName
         // debugger;
         const message_id = data[0];
@@ -168,7 +173,7 @@ class BlocksEditorPawn {
         ide.broadcast("_responseToReporter", null, payload);
     }
 
-    _blockSay(data){
+    _blockSay(data) {
         const [spriteNameFromSnap, eventName, argsData] = data;
         const args = argsData.asArray();
         const spriteName = `${this.actor.name}-${this.actor.id}`;
