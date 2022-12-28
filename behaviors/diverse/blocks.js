@@ -2,7 +2,7 @@ class BlocksGUIPawn {
     setup() {
         const editor = document.getElementById("editor");
         if (editor) {
-            editor.remove();
+            return;
         }
         const div = document.createElement("div");
         div.innerHTML = `<div id="editor" style="
@@ -77,6 +77,15 @@ class BlocksGUIPawn {
         ide.addMessageListener("_blockSay", data => this.publish("_blockSay", "_blockSay", data.asArray()));
         ide.addMessageListener("_snapBubbleSay", data => this.publish("blocks", "_snapBubbleSay", data.asArray()));
         requestAnimationFrame(loop);
+    }
+
+    teardown() {
+        const ide = window.world.children[0];
+        if (ide) {
+            const editor = document.getElementById("editor");
+            editor.style.display = "none";
+            ide.stop();
+        }
     }
 }
 
