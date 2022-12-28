@@ -177,11 +177,13 @@ class BlocksEditorPawn {
 
     _queryActorData(data) {
         // use message_id(globally unique), no need to specify spriteName
-        // debugger;
-        const message_id = data[0];
-        let ide = window.world.children[0];
-        let payload = new List([message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
-        ide.broadcast("_responseToReporter", null, payload);
+        const [spriteNameFromSnap, message_id] = data;
+        const spriteName = `${this.actor.name}-${this.actor.id}`;
+        if (spriteNameFromSnap === spriteName) {
+            let ide = window.world.children[0];
+            let payload = new List([spriteNameFromSnap, message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
+            ide.broadcast("_responseToReporter", null, payload);
+        }   
     }
 
     _blockSay(data) {
