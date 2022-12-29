@@ -8,9 +8,6 @@ export function init(Constants) {
         "lights.js", "sound.js", "throb.js", "urlLink.js", "simpleSpin.js", "text3D.js", "replaceWorld.js", "crystalball.js", "curve.js", "circle.js", "openPortal.js",
     ];
 
-    Constants.ExcludedSystemBehaviorModules = ["gizmo.js"];
-    Constants.IncludedSystemBehaviorModules = ["pedestal.js"];
-
     Constants.DefaultCards = [
         {
             card: {
