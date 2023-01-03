@@ -91,13 +91,14 @@ class BlocksGUIPawn {
 
 class SpriteManagerActor {
     setup() {
-        this.cards = this.queryCards().filter(card => card.layers.includes("pointer"));
+
     }
 }
 
 class SpriteManagerPawn {
     setup() {
-        this.subscribe("removeSprite", "removeSprite", this.removeSprite);
+        this.subscribe("spriteManager", "removeSprite", this.removeSprite);
+        this.cards = this.actor.queryCards().filter(card => card.layers.includes("pointer"));
         this.handler = () => this.start();
         document.addEventListener("click", this.handler);
     }
@@ -105,7 +106,7 @@ class SpriteManagerPawn {
     start() {
         const ide = window.world.children[0];
         if (ide) {
-            this.actor.cards.forEach(card => {
+            this.cards.forEach(card => {
                 const sprite = new SpriteMorph(ide.globalVariables);
                 const spriteName = `${card.name}-${card.id}`;
                 sprite.name = ide.newSpriteName(spriteName);
