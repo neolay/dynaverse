@@ -110,6 +110,7 @@ class SpriteManagerPawn {
                 const sprite = new SpriteMorph(ide.globalVariables);
                 const spriteName = `${card.name}-${card.id}`;
                 sprite.name = ide.newSpriteName(spriteName);
+                sprite.card = card;
                 ide.stage.add(sprite);
                 ide.sprites.add(sprite);
                 ide.corral.addSprite(sprite);
