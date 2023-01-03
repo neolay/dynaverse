@@ -134,12 +134,6 @@ class SpriteManagerPawn {
 
 class BlocksEditorPawn {
     setEditor() {
-        this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
-        this.subscribe("blocks", "scaleTo", this._scaleTo);
-        this.subscribe("blocks", "_queryActorData", this._queryActorData);
-        this.subscribe("_blockSay", "_blockSay", this._blockSay);
-        this.subscribe("blocks", "_snapBubbleSay", this._snapBubbleSay);
-
         const editor = document.getElementById("editor");
         const tag = document.getElementById("card-tag");
         const ide = window.world.children[0];
@@ -150,6 +144,14 @@ class BlocksEditorPawn {
             tag.textContent = ` - ${spriteName}`;
             editor.style.display = "";
         }
+    }
+
+    makeSubscriptions() {
+        this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
+        this.subscribe("blocks", "scaleTo", this._scaleTo);
+        this.subscribe("blocks", "_queryActorData", this._queryActorData);
+        this.subscribe("_blockSay", "_blockSay", this._blockSay);
+        this.subscribe("blocks", "_snapBubbleSay", this._snapBubbleSay);
     }
 
     _setPropertyTo(data) {
@@ -183,7 +185,7 @@ class BlocksEditorPawn {
             let ide = window.world.children[0];
             let payload = new List([spriteNameFromSnap, message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
             ide.broadcast("_responseToReporter", null, payload);
-        }   
+        }
     }
 
     _blockSay(data) {
@@ -213,7 +215,6 @@ class BlocksEditorPawn {
             ide.broadcast("click", null, payload); // todo send to Sprite
         }
     }
-
 }
 
 export default {
