@@ -89,6 +89,23 @@ class BlocksGUIPawn {
     }
 }
 
+class BlocksEditorPawn {
+    setEditor() {
+        const ide = window.world?.children[0];
+        if (ide) {
+            const editor = document.getElementById("editor");
+            const tag = document.getElementById("card-tag");
+            const spriteName = `${this.actor.name}-${this.actor.id}`;
+            const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
+            if (sprite) {
+                ide.selectSprite(sprite);
+                tag.textContent = ` - ${spriteName}`;
+                editor.style.display = "";
+            }
+        }
+    }
+}
+
 class SpriteManagerActor {
     setup() {
 
@@ -130,91 +147,6 @@ class SpriteManagerPawn {
                     ide.removeSprite(morph);
                 }
             });
-        }
-    }
-}
-
-class BlocksEditorPawn {
-    setEditor() {
-        const editor = document.getElementById("editor");
-        const tag = document.getElementById("card-tag");
-        const ide = window.world.children[0];
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
-        if (sprite) {
-            ide.selectSprite(sprite);
-            tag.textContent = ` - ${spriteName}`;
-            editor.style.display = "";
-        }
-    }
-
-    makeSubscriptions() {
-        this.subscribe("blocks", "_setPropertyTo", this._setPropertyTo);
-        this.subscribe("blocks", "scaleTo", this._scaleTo);
-        this.subscribe("blocks", "_queryActorData", this._queryActorData);
-        this.subscribe("_blockSay", "_blockSay", this._blockSay);
-        this.subscribe("blocks", "_snapBubbleSay", this._snapBubbleSay);
-    }
-
-    _setPropertyTo(data) {
-        // data: list(spriteName, property, args)
-        const [spriteNameFromSnap, property, argsData] = data;
-        const args = argsData.asArray();
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (spriteNameFromSnap === spriteName) {
-            if (args.length > 0 && args[0] === "q_euler") {
-                this.set({[property]: Microverse.q_euler(args[1], args[2], args[3])});
-                return
-            }
-            this.set({[property]: args});
-        }
-    }
-
-    _scaleTo(data) {
-        const [spriteNameFromSnap, percent] = data;
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (spriteNameFromSnap === spriteName) {
-            const scale = this.actor._initialData.scale.map(x => x * percent / 100);
-            this.scaleTo(scale);
-        }
-    }
-
-    _queryActorData(data) {
-        // use message_id(globally unique), no need to specify spriteName
-        const [spriteNameFromSnap, message_id] = data;
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (spriteNameFromSnap === spriteName) {
-            let ide = window.world.children[0];
-            let payload = new List([spriteNameFromSnap, message_id, new List([new List(this.actor.translation), new List(this.actor.rotation), new List(this.actor.scale)])]);
-            ide.broadcast("_responseToReporter", null, payload);
-        }
-    }
-
-    _blockSay(data) {
-        const [spriteNameFromSnap, eventName, argsData] = data;
-        const args = argsData.asArray();
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (spriteNameFromSnap === spriteName) {
-            this.say(eventName, args);
-        }
-    }
-
-    _snapBubbleSay(data) {
-        const [spriteNameFromSnap, argsData] = data;
-        const args = argsData.asArray();
-        const spriteName = `${this.actor.name}-${this.actor.id}`;
-        if (spriteNameFromSnap === spriteName) {
-            this.say("_bubbleSay", args);
-        }
-    }
-
-    broadcastClick() {
-        if (window.world) {
-            const ide = window.world.children[0];
-            let spriteName = `${this.actor.name}-${this.actor.id}`;
-            let payload = new List([spriteName]);
-            // broadcast to Snap
-            ide.broadcast("click", null, payload); // todo send to Sprite
         }
     }
 }
