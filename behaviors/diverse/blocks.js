@@ -106,6 +106,18 @@ class BlocksEditorPawn {
     }
 }
 
+class BlocksHandlerActor {
+    setup() {
+
+    }
+}
+
+class BlocksHandlerPawn {
+    setup() {
+
+    }
+}
+
 class SpriteManagerActor {
     setup() {
 
@@ -155,16 +167,21 @@ export default {
     modules: [
         {
             name: "BlocksGUI",
-            pawnBehaviors: [BlocksGUIPawn],
+            pawnBehaviors: [BlocksGUIPawn]
+        },
+        {
+            name: "BlocksEditor",
+            pawnBehaviors: [BlocksEditorPawn]
+        },
+        {
+            name: "BlocksHandler",
+            actorBehaviors: [BlocksHandlerActor],
+            pawnBehaviors: [BlocksHandlerPawn]
         },
         {
             name: "SpriteManager",
             actorBehaviors: [SpriteManagerActor],
             pawnBehaviors: [SpriteManagerPawn]
-        },
-        {
-            name: "BlocksEditor",
-            pawnBehaviors: [BlocksEditorPawn]
         }
     ]
 }
