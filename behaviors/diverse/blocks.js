@@ -139,6 +139,13 @@ class BlocksHandlerActor {
         this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
         this.subscribe(this.id, `${PREFIX}:scaleTo`, this.scaleTo);
     }
+
+    translateOnAxis(axis, dist) {
+        const relative = Microverse.v3_scale(axis, dist);
+        const move = Microverse.v3_transform(relative, Microverse.m4_rotationQ(this.rotation));
+        const v = Microverse.v3_add(this.translation, move);
+        this.translateTo(v);
+    }
 }
 
 class BlocksHandlerPawn {
@@ -208,3 +215,5 @@ export default {
         }
     ]
 }
+
+/* globals Microverse */
