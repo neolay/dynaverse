@@ -84,6 +84,7 @@ class BlocksGUIPawn {
             data = args;
         switch (command) {
             case "translateTo":
+            case "scaleTo":
                 break;
             case "rotateTo":
                 data = Microverse.q_euler(...args);
@@ -93,6 +94,9 @@ class BlocksGUIPawn {
                 break;
             case "setRotation":
                 data = {rotation: Microverse.q_euler(...args)};
+                break;
+            case "setScale":
+                data = {scale: args};
                 break;
         }
         this.publish(scope, event, data);
@@ -130,8 +134,10 @@ class BlocksHandlerActor {
         const PREFIX = "blocks";
         this.subscribe(this.id, `${PREFIX}:setTranslation`, this.set);
         this.subscribe(this.id, `${PREFIX}:setRotation`, this.set);
+        this.subscribe(this.id, `${PREFIX}:setScale`, this.set);
         this.subscribe(this.id, `${PREFIX}:translateTo`, this.translateTo);
         this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
+        this.subscribe(this.id, `${PREFIX}:scaleTo`, this.scaleTo);
     }
 }
 
