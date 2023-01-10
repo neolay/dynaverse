@@ -15,6 +15,17 @@ export function init(Constants) {
                 type: "object",
                 spawn: "default",
                 behaviorModules: ["BlocksGUI", "SpriteManager"],
+                translation: [
+                    7.5516356710613435,
+                    -0.06965080749988539,
+                    -0.9345792539321668
+                ],
+                rotation: [
+                    0,
+                    0.48725287459904615,
+                    0,
+                    0.8732609210281691
+                ],
                 // lang: "zh_CN"
             }
         },
@@ -148,22 +159,22 @@ export function init(Constants) {
         },
         {
             card: {
-            name: "line graphs background",
-            translation: [11.914606500892997, 0.4, -1],
-            rotation: [0, -Math.PI / 2, 0],
-            scale: [2, 2, 2],
-            className: "TextFieldActor",
-            type: "text",
-            layers: ["pointer"],
-            color: 0xFFFFFF,
-            backgroundColor: 0x202020,
-            frameColor: 0x202020,
-            width: 1.1,
-            height: 1.2,
-            depth: 0.05,
-            margins: {bottom: 20, left: 20, right: 20, top: 20},
-            runs: [{ text: "tilt x\n\n\n\ntilt y\n\n\n\ntilt z"}],
-            textScale: 0.002,
+                name: "line graphs background",
+                translation: [11.914606500892997, 0.4, -1],
+                rotation: [0, -Math.PI / 2, 0],
+                scale: [2, 2, 2],
+                className: "TextFieldActor",
+                type: "text",
+                layers: ["pointer"],
+                color: 0xFFFFFF,
+                backgroundColor: 0x202020,
+                frameColor: 0x202020,
+                width: 1.1,
+                height: 1.2,
+                depth: 0.05,
+                margins: {bottom: 20, left: 20, right: 20, top: 20},
+                runs: [{text: "tilt x\n\n\n\ntilt y\n\n\n\ntilt z"}],
+                textScale: 0.002,
             },
             id: "linegraphs",
         },
@@ -218,7 +229,7 @@ export function init(Constants) {
                 width: 1.1,
                 height: 1.2,
                 depth: 0.05,
-                margins: {bottom: 20,left: 20,right: 20,top: 20},
+                margins: {bottom: 20, left: 20, right: 20, top: 20},
                 runs: [{text: "Power"}],
                 textScale: 0.002,
             },
@@ -236,6 +247,22 @@ export function init(Constants) {
                 behaviorModules: ["Values", "BarGraph"],
                 parent: "bargraph",
             },
+        },
+        {
+            card: {
+                name: "alice",
+                translation: [0, 0, 0],
+                scale: [0.42698682808571414, 0.42698682808571414, 0.42698682808571414],
+                rotation: [0, Math.PI, 0],
+                layers: ["pointer"],
+                dataLocation: "30hu3n--alpLJIMDzvTbHl8E27n0N7PU4oDBPiyOaOU4WEREQEMKHx9WWVxVQx5FQx5TQl9BRVVEHllfH0UfSmVER2B_SnZFf2MBe1lXfWpZBQMJSHZ0dwgAAh9ZXx5TQl9BRVVEHl1ZU0JfRlVCQ1UeXF9TUVxUVUZUVVZRRVxEHwNpVHx_ZWpReQNxQUR-fWh9VlRpBAdJRFZqRV4Je3xSVwBvSkkAd1N8SnEfVFFEUR9oY0ZHf294YQZUU1tEeGVEaVdpQAFRR3h_eWN-UwFmRkJoZkNpY1QCW111",
+                dataScale: [0.5937912363848868, 0.5937912363848868, 0.5937912363848868],
+                fileName: "/alice.zip",
+                modelType: "zip",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
         },
     ];
 }
