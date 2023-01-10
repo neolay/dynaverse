@@ -83,6 +83,11 @@ class BlocksGUIPawn {
             event = `${PREFIX}:${command}`,
             data = args;
         switch (command) {
+            case "translateTo":
+                break;
+            case "rotateTo":
+                data = Microverse.q_euler(...args);
+                break;
             case "setTranslation":
                 data = {translation: args};
                 break;
@@ -125,6 +130,8 @@ class BlocksHandlerActor {
         const PREFIX = "blocks";
         this.subscribe(this.id, `${PREFIX}:setTranslation`, this.set);
         this.subscribe(this.id, `${PREFIX}:setRotation`, this.set);
+        this.subscribe(this.id, `${PREFIX}:translateTo`, this.translateTo);
+        this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
     }
 }
 
