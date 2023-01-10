@@ -98,6 +98,8 @@ class BlocksGUIPawn {
             case "translateTo":
             case "scaleTo":
             case "move":
+            case "turn":
+            case "roll":
                 break;
         }
         this.publish(scope, event, data);
@@ -140,6 +142,8 @@ class BlocksHandlerActor {
         this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
         this.subscribe(this.id, `${PREFIX}:scaleTo`, this.scaleTo);
         this.subscribe(this.id, `${PREFIX}:move`, this.move);
+        this.subscribe(this.id, `${PREFIX}:turn`, this.turn);
+        this.subscribe(this.id, `${PREFIX}:roll`, this.roll);
     }
 
     move(options) {
@@ -162,6 +166,37 @@ class BlocksHandlerActor {
                 break;
             case "down":
                 this.translateY(-dist);
+                break;
+        }
+    }
+
+    turn(options) {
+        const [dir, angle] = options;
+        switch (dir) {
+            case "forward":
+                this.rotateX(-angle);
+                break;
+            case "backward":
+                this.rotateX(angle);
+                break;
+            case "left":
+                this.rotateY(angle);
+                break;
+            case "right":
+                this.rotateY(-angle);
+                break;
+        }
+
+    }
+
+    roll(options) {
+        const [dir, angle] = options;
+        switch (dir) {
+            case "left":
+                this.rotateZ(angle);
+                break;
+            case "right":
+                this.rotateZ(-angle);
                 break;
         }
     }
