@@ -184,6 +184,24 @@ class BlocksHandlerActor {
     translateZ(dist) {
         this.translateOnAxis(Microverse._zAxis, dist);
     }
+
+    rotateOnAxis(axis, angle) {
+        const axisAngle = Microverse.q_axisAngle(axis, angle);
+        const q = Microverse.q_multiply(this.rotation, axisAngle);
+        this.rotateTo(q);
+    }
+
+    rotateX(angle) {
+        this.rotateOnAxis(Microverse._xAxis, angle);
+    }
+
+    rotateY(angle) {
+        this.rotateOnAxis(Microverse._yAxis, angle);
+    }
+
+    rotateZ(angle) {
+        this.rotateOnAxis(Microverse._zAxis, angle);
+    }
 }
 
 class BlocksHandlerPawn {
