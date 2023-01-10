@@ -71,16 +71,11 @@ class BlocksGUIPawn {
         };
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
-        ide.addMessageListener("_setPropertyTo", data => this.publish("blocks", "_setPropertyTo", data.asArray()));
-        ide.addMessageListener("scaleTo", data => this.publish("blocks", "scaleTo", data.asArray()));
-        ide.addMessageListener("_queryActorData", data => this.publish("blocks", "_queryActorData", data.asArray()));
-        ide.addMessageListener("_blockSay", data => this.publish("_blockSay", "_blockSay", data.asArray()));
-        ide.addMessageListener("_snapBubbleSay", data => this.publish("blocks", "_snapBubbleSay", data.asArray()));
         requestAnimationFrame(loop);
     }
 
     teardown() {
-        const ide = window.world.children[0];
+        const ide = window.world?.children[0];
         if (ide) {
             const editor = document.getElementById("editor");
             editor.style.display = "none";
