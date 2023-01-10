@@ -83,12 +83,6 @@ class BlocksGUIPawn {
             event = `${PREFIX}:${command}`,
             data = args;
         switch (command) {
-            case "translateTo":
-            case "scaleTo":
-                break;
-            case "rotateTo":
-                data = Microverse.q_euler(...args);
-                break;
             case "setTranslation":
                 data = {translation: args};
                 break;
@@ -97,6 +91,13 @@ class BlocksGUIPawn {
                 break;
             case "setScale":
                 data = {scale: args};
+                break;
+            case "rotateTo":
+                data = Microverse.q_euler(...args);
+                break;
+            case "translateTo":
+            case "scaleTo":
+            case "move":
                 break;
         }
         this.publish(scope, event, data);
@@ -138,6 +139,31 @@ class BlocksHandlerActor {
         this.subscribe(this.id, `${PREFIX}:translateTo`, this.translateTo);
         this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
         this.subscribe(this.id, `${PREFIX}:scaleTo`, this.scaleTo);
+        this.subscribe(this.id, `${PREFIX}:move`, this.move);
+    }
+
+    move(options) {
+        const [dir, dist] = options;
+        switch (dir) {
+            case "left":
+                this.translateX(dist);
+                break;
+            case "right":
+                this.translateX(-dist);
+                break;
+            case "forward" :
+                this.translateZ(dist);
+                break;
+            case "backward":
+                this.translateZ(-dist);
+                break;
+            case "up":
+                this.translateY(dist);
+                break;
+            case "down":
+                this.translateY(-dist);
+                break;
+        }
     }
 
     translateOnAxis(axis, dist) {
@@ -145,6 +171,18 @@ class BlocksHandlerActor {
         const move = Microverse.v3_transform(relative, Microverse.m4_rotationQ(this.rotation));
         const v = Microverse.v3_add(this.translation, move);
         this.translateTo(v);
+    }
+
+    translateX(dist) {
+        this.translateOnAxis(Microverse._xAxis, dist);
+    }
+
+    translateY(dist) {
+        this.translateOnAxis(Microverse._yAxis, dist);
+    }
+
+    translateZ(dist) {
+        this.translateOnAxis(Microverse._zAxis, dist);
     }
 }
 
