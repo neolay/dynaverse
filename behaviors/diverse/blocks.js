@@ -76,9 +76,21 @@ class BlocksGUIPawn {
     }
 
     doCommand(options) {
+        const PREFIX = "blocks";
         const [cardId, command, args] = options.asArray();
         console.log("received", command, options);
-        this.publish(cardId, command, args);
+        let scope = cardId,
+            event = `${PREFIX}:${command}`,
+            data = args;
+        switch (command) {
+            case "setTranslation":
+                data = {translation: args};
+                break;
+            case "setRotation":
+                data = {rotation: Microverse.q_euler(...args)};
+                break;
+        }
+        this.publish(scope, event, data);
     }
 
     teardown() {
@@ -110,7 +122,9 @@ class BlocksEditorPawn {
 
 class BlocksHandlerActor {
     setup() {
-
+        const PREFIX = "blocks";
+        this.subscribe(this.id, `${PREFIX}:setTranslation`, this.set);
+        this.subscribe(this.id, `${PREFIX}:setRotation`, this.set);
     }
 }
 
