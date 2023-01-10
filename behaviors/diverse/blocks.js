@@ -133,16 +133,10 @@ class SpriteManagerPawn {
     }
 
     start() {
-        const ide = window.world.children[0];
+        const ide = window.world?.children[0];
         if (ide) {
             this.cards.forEach(card => {
-                const sprite = new SpriteMorph(ide.globalVariables);
-                const spriteName = `${card.name}-${card.id}`;
-                sprite.name = ide.newSpriteName(spriteName);
-                sprite.card = card;
-                ide.stage.add(sprite);
-                ide.sprites.add(sprite);
-                ide.corral.addSprite(sprite);
+                this.addSprite(card);
             });
         }
         document.removeEventListener("click", this.handler);
@@ -150,7 +144,7 @@ class SpriteManagerPawn {
     }
 
     removeSprite(data) {
-        const ide = window.world.children[0];
+        const ide = window.world?.children[0];
         if (ide) {
             ide.sprites.asArray().forEach(morph => {
                 if (morph.name === data) {
