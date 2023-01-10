@@ -71,7 +71,14 @@ class BlocksGUIPawn {
         };
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
+        ide.addMessageListener("doCommand", options => this.doCommand(options));
         requestAnimationFrame(loop);
+    }
+
+    doCommand(options) {
+        const [cardId, command, args] = options.asArray();
+        console.log("received", command, options);
+        this.publish(cardId, command, args);
     }
 
     teardown() {
