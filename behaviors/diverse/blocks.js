@@ -95,6 +95,11 @@ class BlocksGUIPawn {
             case "rotateTo":
                 data = Microverse.q_euler(...args);
                 break;
+            case "createCardClone":
+                scope = "spriteManager";
+                event = "duplicateCard";
+                data = [cardId, args];
+                break;
             case "translateTo":
             case "scaleTo":
             case "move":
@@ -248,7 +253,7 @@ class BlocksHandlerPawn {
 
 class SpriteManagerActor {
     setup() {
-
+        this.subscribe("spriteManager", "duplicateCard", this.duplicateCard);
     }
 
     duplicateCard(options) {
@@ -259,11 +264,13 @@ class SpriteManagerActor {
         const newCard = this.createCard(data);
         console.log("duplicate target card", target);
         console.log("new card", newCard);
+        this.publish("spriteManager", "cloneSprite", [newCard, exemplarName]);
     }
 }
 
 class SpriteManagerPawn {
     setup() {
+        this.subscribe("spriteManager", "cloneSprite", this.cloneSprite);
         this.subscribe("spriteManager", "removeSprite", this.removeSprite);
         this.cards = this.actor.queryCards().filter(card => card.layers.includes("pointer"));
         this.handler = () => this.start();
@@ -281,11 +288,25 @@ class SpriteManagerPawn {
         delete this.handler;
     }
 
-    removeSprite(data) {
+    cloneSprite(options) {
+        const ide = window.world?.children[0];
+        if (ide) {
+            const [newCard, exemplarName] = options;
+            const exemplar = ide.sprites.asArray().filter((morph) => morph.name === exemplarName)[0];
+            const stage = exemplar.parentThatIsA(StageMorph);
+            const clone = exemplar.fullCopy(true);
+            clone.card = newCard;
+            clone.clonify(stage, true);
+            console.log("exemplar sprite", exemplar);
+            console.log("cloned sprite", clone);
+        }
+    }
+
+    removeSprite(spriteName) {
         const ide = window.world?.children[0];
         if (ide) {
             ide.sprites.asArray().forEach(morph => {
-                if (morph.name === data) {
+                if (morph.name === spriteName) {
                     const editor = document.getElementById("editor");
                     editor.style.display = "none";
                     ide.removeSprite(morph);
