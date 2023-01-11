@@ -81,7 +81,7 @@ class BlocksGUIPawn {
         console.log("received", command, options);
         let scope = cardId,
             event = `${PREFIX}:${command}`,
-            data = args;
+            data;
         switch (command) {
             case "setTranslation":
                 data = {translation: args};
@@ -100,6 +100,7 @@ class BlocksGUIPawn {
             case "move":
             case "turn":
             case "roll":
+                data = args;
                 break;
         }
         this.publish(scope, event, data);
@@ -248,6 +249,16 @@ class BlocksHandlerPawn {
 class SpriteManagerActor {
     setup() {
 
+    }
+
+    duplicateCard(options) {
+        const [cardId, exemplarName] = options;
+        const target = this.queryCards().filter(card => card.id === cardId)[0];
+        const data = target.collectCardData();
+        data.layers = data.layers.concat(["clone"]);
+        const newCard = this.createCard(data);
+        console.log("duplicate target card", target);
+        console.log("new card", newCard);
     }
 }
 
