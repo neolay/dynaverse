@@ -100,6 +100,11 @@ class BlocksGUIPawn {
                 event = "duplicateCard";
                 data = [cardId, args];
                 break;
+            case "removeCardClone":
+                scope = "spriteManager";
+                event = "removeCard";
+                data = cardId;
+                break;
             case "translateTo":
             case "scaleTo":
             case "move":
@@ -254,6 +259,7 @@ class BlocksHandlerPawn {
 class SpriteManagerActor {
     setup() {
         this.subscribe("spriteManager", "duplicateCard", this.duplicateCard);
+        this.subscribe("spriteManager", "removeCard", this.removeCard);
     }
 
     duplicateCard(options) {
@@ -265,6 +271,11 @@ class SpriteManagerActor {
         console.log("duplicate target card", target);
         console.log("new card", newCard);
         this.publish("spriteManager", "cloneSprite", [newCard, exemplarName]);
+    }
+
+    removeCard(cardId) {
+        const target = this.queryCards().filter(card => card.id === cardId)[0];
+        target.destroy();
     }
 }
 
