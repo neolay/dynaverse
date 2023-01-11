@@ -132,7 +132,7 @@ class BlocksEditorPawn {
         if (ide) {
             const editor = document.getElementById("editor");
             const tag = document.getElementById("card-tag");
-            const spriteName = `${this.actor.name}-${this.actor.id}`;
+            const spriteName = this.actor.spriteName;
             const sprite = ide.sprites.asArray().filter((morph) => morph.name === spriteName)[0];
             if (sprite) {
                 ide.selectSprite(sprite);
@@ -266,8 +266,8 @@ class SpriteManagerActor {
         const [cardId, exemplarName] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         const data = target.collectCardData();
-        data.layers = data.layers.concat(["clone"]);
         const newCard = this.createCard(data);
+        newCard.addLayer("clone");
         console.log("duplicate target card", target);
         console.log("new card", newCard);
         this.publish("spriteManager", "cloneSprite", [newCard, exemplarName]);
