@@ -155,6 +155,11 @@ class BlocksHandlerActor {
         this.subscribe(this.id, `${PREFIX}:move`, this.move);
         this.subscribe(this.id, `${PREFIX}:turn`, this.turn);
         this.subscribe(this.id, `${PREFIX}:roll`, this.roll);
+        this.addEventListener("pointerTap", "mouseClickLeft");
+        this.addEventListener("pointerDown", "mouseDownLeft");
+        this.addEventListener("pointerEnter", "mouseEnter");
+        this.addEventListener("pointerLeave", "mouseLeave");
+        this.addEventListener("pointerMove", "nop");
     }
 
     move(options) {
@@ -248,11 +253,35 @@ class BlocksHandlerActor {
     rotateZ(angle) {
         this.rotateOnAxis(Microverse._zAxis, angle);
     }
+
+    mouseClickLeft() {
+        this.say("interaction", "clicked");
+    }
+
+    mouseDownLeft() {
+        this.say("interaction", "pressed");
+    }
+
+    mouseEnter() {
+        this.say("interaction", "mouse-entered");
+    }
+
+    mouseLeave() {
+        this.say("interaction", "mouse-departed");
+    }
 }
 
 class BlocksHandlerPawn {
     setup() {
+        this.listen("interaction", this.receiveUserInteraction);
+    }
 
+    receiveUserInteraction(interaction) {
+        const ide = window.world?.children[0];
+        if (ide) {
+            const sprite = ide.sprites.asArray().filter((morph) => morph.name === this.actor.spriteName)[0];
+            sprite?.receiveUserInteraction(interaction);
+        }
     }
 }
 
