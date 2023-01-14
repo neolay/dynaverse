@@ -77,8 +77,6 @@ class BlocksGUIPawn {
         requestAnimationFrame(loop);
     }
 
-
-
     doCommand(options) {
         const PREFIX = "blocks";
         const [cardId, messageId, _, command, argsList] = options.asArray(); // ignore _ ("wait")
@@ -121,7 +119,7 @@ class BlocksGUIPawn {
         this.publish(scope, event, [data, messageId]);
     }
 
-    _doCommandDone (messageId){
+    _doCommandDone(messageId) {
         const ide = window.world?.children[0];
         if (ide) {
             let payload = new List([messageId]);
@@ -176,25 +174,25 @@ class BlocksHandlerActor {
         this.addEventListener("pointerMove", "nop");
     }
 
-    _set(options){
+    _set(options) {
         const [data, messageId] = options;
         this.set(data);
         this.publish("doCommand", "done", messageId);
     }
 
-    _translateTo(options){
+    _translateTo(options) {
         const [data, messageId] = options;
         this.translateTo(data);
         this.publish("doCommand", "done", messageId);
     }
 
-    _rotateTo(options){
+    _rotateTo(options) {
         const [data, messageId] = options;
         this.rotateTo(data);
         this.publish("doCommand", "done", messageId);
     }
 
-    _scaleTo(options){
+    _scaleTo(options) {
         const [data, messageId] = options;
         this.scaleTo(data);
         this.publish("doCommand", "done", messageId);
