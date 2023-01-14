@@ -72,12 +72,17 @@ class BlocksGUIPawn {
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
         ide.addMessageListener("doCommand", options => this.doCommand(options));
+        // this.publish("doCommand", "done", messageId);
+        this.subscribe("doCommand", "done", this._doCommandDone);
         requestAnimationFrame(loop);
     }
 
+
+
     doCommand(options) {
         const PREFIX = "blocks";
-        const [cardId, command, args] = options.asArray();
+        const [cardId, messageId, _, command, argsList] = options.asArray(); // ignore _ ("wait")
+        const args = argsList.asArray();
         console.log("received", command, options);
         let scope = cardId,
             event = `${PREFIX}:${command}`,
@@ -98,7 +103,7 @@ class BlocksGUIPawn {
             case "createCardClone":
                 scope = "spriteManager";
                 event = "duplicateCard";
-                data = [cardId, args];
+                data = [cardId, ...args];
                 break;
             case "removeCardClone":
                 scope = "spriteManager";
@@ -113,7 +118,15 @@ class BlocksGUIPawn {
                 data = args;
                 break;
         }
-        this.publish(scope, event, data);
+        this.publish(scope, event, [data, messageId]);
+    }
+
+    _doCommandDone (messageId){
+        const ide = window.world?.children[0];
+        if (ide) {
+            let payload = new List([messageId]);
+            ide.broadcast("_doCommandDone", null, payload);
+        }
     }
 
     teardown() {
@@ -141,17 +154,18 @@ class BlocksEditorPawn {
             }
         }
     }
+
 }
 
 class BlocksHandlerActor {
     setup() {
         const PREFIX = "blocks";
-        this.subscribe(this.id, `${PREFIX}:setTranslation`, this.set);
-        this.subscribe(this.id, `${PREFIX}:setRotation`, this.set);
-        this.subscribe(this.id, `${PREFIX}:setScale`, this.set);
-        this.subscribe(this.id, `${PREFIX}:translateTo`, this.translateTo);
-        this.subscribe(this.id, `${PREFIX}:rotateTo`, this.rotateTo);
-        this.subscribe(this.id, `${PREFIX}:scaleTo`, this.scaleTo);
+        this.subscribe(this.id, `${PREFIX}:setTranslation`, this._set);
+        this.subscribe(this.id, `${PREFIX}:setRotation`, this._set);
+        this.subscribe(this.id, `${PREFIX}:setScale`, this._set);
+        this.subscribe(this.id, `${PREFIX}:translateTo`, this._translateTo);
+        this.subscribe(this.id, `${PREFIX}:rotateTo`, this._rotateTo);
+        this.subscribe(this.id, `${PREFIX}:scaleTo`, this._scaleTo);
         this.subscribe(this.id, `${PREFIX}:move`, this.move);
         this.subscribe(this.id, `${PREFIX}:turn`, this.turn);
         this.subscribe(this.id, `${PREFIX}:roll`, this.roll);
@@ -162,8 +176,32 @@ class BlocksHandlerActor {
         this.addEventListener("pointerMove", "nop");
     }
 
+    _set(options){
+        const [data, messageId] = options;
+        this.set(data);
+        this.publish("doCommand", "done", messageId);
+    }
+
+    _translateTo(options){
+        const [data, messageId] = options;
+        this.translateTo(data);
+        this.publish("doCommand", "done", messageId);
+    }
+
+    _rotateTo(options){
+        const [data, messageId] = options;
+        this.rotateTo(data);
+        this.publish("doCommand", "done", messageId);
+    }
+
+    _scaleTo(options){
+        const [data, messageId] = options;
+        this.scaleTo(data);
+        this.publish("doCommand", "done", messageId);
+    }
+
     move(options) {
-        const [dir, dist] = options;
+        const [[dir, dist], messageId] = options;
         switch (dir) {
             case "left":
                 this.translateX(dist);
@@ -184,10 +222,12 @@ class BlocksHandlerActor {
                 this.translateY(-dist);
                 break;
         }
+        // done, publish it to Snap
+        this.publish("doCommand", "done", messageId);
     }
 
     turn(options) {
-        const [dir, angle] = options;
+        const [[dir, angle], messageId] = options;
         switch (dir) {
             case "forward":
                 this.rotateX(-angle);
@@ -202,11 +242,11 @@ class BlocksHandlerActor {
                 this.rotateY(-angle);
                 break;
         }
-
+        this.publish("doCommand", "done", messageId);
     }
 
     roll(options) {
-        const [dir, angle] = options;
+        const [[dir, angle], messageId] = options;
         switch (dir) {
             case "left":
                 this.rotateZ(angle);
@@ -215,6 +255,7 @@ class BlocksHandlerActor {
                 this.rotateZ(-angle);
                 break;
         }
+        this.publish("doCommand", "done", messageId);
     }
 
     translateOnAxis(axis, dist) {
@@ -292,7 +333,7 @@ class SpriteManagerActor {
     }
 
     duplicateCard(options) {
-        const [cardId, exemplarName] = options;
+        const [[cardId, exemplarName], messageId] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         const data = target.collectCardData();
         const newCard = this.createCard(data);
@@ -302,7 +343,8 @@ class SpriteManagerActor {
         this.publish("spriteManager", "cloneSprite", [newCard, exemplarName]);
     }
 
-    removeCard(cardId) {
+    removeCard(options) {
+        const [cardId, messageId] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         target.destroy();
     }
