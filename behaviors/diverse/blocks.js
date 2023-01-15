@@ -125,18 +125,20 @@ class BlocksGUIPawn {
         if (ide) {
             let payload = new List([messageId]);
 
-            if (!this._isBroadcastingMessage){
+            if (!this._isBroadcastingMessage) {
                 this._isBroadcastingMessage = true;
                 ide.broadcast("_doCommandDone", this._broadcastCallback.bind(this), payload);
                 // setTimeout(() => {this._isBroadcastingMessage = false}, 1);
             } else {
                 // retry; introduce random sleep time to avoid simultaneous broadcasting
-                setTimeout(() => {this._doCommandDone(messageId)}, Math.floor(Math.random() * 10));
+                setTimeout(() => {
+                    this._doCommandDone(messageId)
+                }, Math.floor(Math.random() * 10));
             }
         }
     }
 
-    _broadcastCallback(){
+    _broadcastCallback() {
         this._isBroadcastingMessage = false;
     }
 
@@ -374,7 +376,7 @@ class SpriteManagerPawn {
         const ide = window.world?.children[0];
         if (ide) {
             this.cards.forEach(card => {
-                this.addSprite(card);
+                this.addSprite(this.service("PawnManager").get(card.id));
             });
         }
         document.removeEventListener("click", this.handler);
@@ -388,7 +390,7 @@ class SpriteManagerPawn {
             const exemplar = ide.sprites.asArray().filter((morph) => morph.name === exemplarName)[0];
             const stage = exemplar.parentThatIsA(StageMorph);
             const clone = exemplar.fullCopy(true);
-            clone.card = newCard;
+            clone.cardPawn = this.service("PawnManager").get(newCard.id);
             clone.clonify(stage, true);
             console.log("exemplar sprite", exemplar);
             console.log("cloned sprite", clone);
