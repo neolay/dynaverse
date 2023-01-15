@@ -131,7 +131,7 @@ class BlocksGUIPawn {
                 // setTimeout(() => {this._isBroadcastingMessage = false}, 1000);
             } else {
                 // wait 1/1000 second and retry;
-                setTimeout(() => {this._doCommandDone(messageId)}, 1000);
+                setTimeout(() => {this._doCommandDone(messageId)}, 1);
             }
         }
     }
