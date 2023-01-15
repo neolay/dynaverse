@@ -41,7 +41,7 @@ class BlocksGUIPawn {
         }
 
         const config = {
-            path: "./lib/snap",
+            path: "./lib/blocks",
             load: "./blocks/inline.xml",
             design: "flat",
             border: 1,
