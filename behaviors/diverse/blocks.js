@@ -128,10 +128,10 @@ class BlocksGUIPawn {
             if (!this._isBroadcastingMessage){
                 this._isBroadcastingMessage = true;
                 ide.broadcast("_doCommandDone", this._broadcastCallback.bind(this), payload);
-                // setTimeout(() => {this._isBroadcastingMessage = false}, 1000);
+                // setTimeout(() => {this._isBroadcastingMessage = false}, 1);
             } else {
-                // wait 1/1000 second and retry;
-                setTimeout(() => {this._doCommandDone(messageId)}, 1);
+                // retry; introduce random sleep time to avoid simultaneous broadcasting
+                setTimeout(() => {this._doCommandDone(messageId)}, Math.floor(Math.random() * 10));
             }
         }
     }
