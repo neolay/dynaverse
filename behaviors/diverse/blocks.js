@@ -1,5 +1,6 @@
 class BlocksGUIPawn {
     setup() {
+        this._isBroadcastingMessage = false;
         const editor = document.getElementById("editor");
         if (editor) {
             return;
@@ -73,7 +74,7 @@ class BlocksGUIPawn {
         ide.openIn(window.world);
         ide.addMessageListener("doCommand", options => this.doCommand(options));
         // this.publish("doCommand", "done", messageId);
-        this.subscribe("doCommand", "done", this._doCommandDone);
+        this.subscribe("doCommand", "done", "_doCommandDone");
         requestAnimationFrame(loop);
     }
 
@@ -123,8 +124,20 @@ class BlocksGUIPawn {
         const ide = window.world?.children[0];
         if (ide) {
             let payload = new List([messageId]);
-            ide.broadcast("_doCommandDone", null, payload);
+
+            if (!this._isBroadcastingMessage){
+                this._isBroadcastingMessage = true;
+                ide.broadcast("_doCommandDone", this._broadcastCallback.bind(this), payload);
+                // setTimeout(() => {this._isBroadcastingMessage = false}, 1000);
+            } else {
+                // wait 1/1000 second and retry;
+                setTimeout(() => {this._doCommandDone(messageId)}, 1000);
+            }
         }
+    }
+
+    _broadcastCallback(){
+        this._isBroadcastingMessage = false;
     }
 
     teardown() {
