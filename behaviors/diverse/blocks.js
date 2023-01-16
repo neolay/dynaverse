@@ -72,9 +72,6 @@ class BlocksGUIPawn {
         };
         window.world = new WorldMorph(document.getElementById("snap"), false);
         ide.openIn(window.world);
-        ide.addMessageListener("doCommand", options => this.doCommand(options));
-        // this.publish("doCommand", "done", messageId);
-        this.subscribe("doCommand", "done", "_doCommandDone");
         requestAnimationFrame(loop);
     }
 
@@ -173,48 +170,49 @@ class BlocksEditorPawn {
 class BlocksHandlerActor {
     setup() {
         const PREFIX = "blocks";
-        this.subscribe(this.id, `${PREFIX}:setTranslation`, this._set);
-        this.subscribe(this.id, `${PREFIX}:setRotation`, this._set);
-        this.subscribe(this.id, `${PREFIX}:setScale`, this._set);
-        this.subscribe(this.id, `${PREFIX}:translateTo`, this._translateTo);
-        this.subscribe(this.id, `${PREFIX}:rotateTo`, this._rotateTo);
-        this.subscribe(this.id, `${PREFIX}:scaleTo`, this._scaleTo);
-        this.subscribe(this.id, `${PREFIX}:move`, this.move);
-        this.subscribe(this.id, `${PREFIX}:turn`, this.turn);
-        this.subscribe(this.id, `${PREFIX}:roll`, this.roll);
-        this.addEventListener("pointerTap", "mouseClickLeft");
-        this.addEventListener("pointerDown", "mouseDownLeft");
-        this.addEventListener("pointerEnter", "mouseEnter");
-        this.addEventListener("pointerLeave", "mouseLeave");
-        this.addEventListener("pointerMove", "nop");
+        this.listen(`${PREFIX}:setTranslation`, this._setTranslation);
+        this.listen(`${PREFIX}:setRotation`, this._setRotation);
+        this.listen(`${PREFIX}:setScale`, this._setScale);
+        this.listen(`${PREFIX}:translateTo`, this._translateTo);
+        this.listen(`${PREFIX}:rotateTo`, this._rotateTo);
+        this.listen(`${PREFIX}:scaleTo`, this._scaleTo);
+        this.listen(`${PREFIX}:move`, this.move);
+        this.listen(`${PREFIX}:turn`, this.turn);
+        this.listen(`${PREFIX}:roll`, this.roll);
     }
 
-    _set(options) {
-        const [data, messageId] = options;
-        this.set(data);
-        this.publish("doCommand", "done", messageId);
+    _setTranslation(options) {
+        const [messageId, args] = options;
+        this.set({translation: args});
+    }
+
+    _setRotation(options) {
+        const [messageId, args] = options;
+        this.set({rotation: Microverse.q_euler(...args)});
+    }
+
+    _setScale(options) {
+        const [messageId, args] = options;
+        this.set({scale: args});
     }
 
     _translateTo(options) {
-        const [data, messageId] = options;
-        this.translateTo(data);
-        this.publish("doCommand", "done", messageId);
+        const [messageId, args] = options;
+        this.translateTo(args);
     }
 
     _rotateTo(options) {
-        const [data, messageId] = options;
-        this.rotateTo(data);
-        this.publish("doCommand", "done", messageId);
+        const [messageId, args] = options;
+        this.rotateTo(Microverse.q_euler(...args));
     }
 
     _scaleTo(options) {
-        const [data, messageId] = options;
-        this.scaleTo(data);
-        this.publish("doCommand", "done", messageId);
+        const [messageId, args] = options;
+        this.scaleTo(args);
     }
 
     move(options) {
-        const [[dir, dist], messageId] = options;
+        const [messageId, [dir, dist]] = options;
         switch (dir) {
             case "left":
                 this.translateX(dist);
@@ -235,12 +233,10 @@ class BlocksHandlerActor {
                 this.translateY(-dist);
                 break;
         }
-        // done, publish it to Snap
-        this.publish("doCommand", "done", messageId);
     }
 
     turn(options) {
-        const [[dir, angle], messageId] = options;
+        const [messageId, [dir, angle]] = options;
         switch (dir) {
             case "forward":
                 this.rotateX(-angle);
@@ -255,11 +251,10 @@ class BlocksHandlerActor {
                 this.rotateY(-angle);
                 break;
         }
-        this.publish("doCommand", "done", messageId);
     }
 
     roll(options) {
-        const [[dir, angle], messageId] = options;
+        const [messageId, [dir, angle]] = options;
         switch (dir) {
             case "left":
                 this.rotateZ(angle);
@@ -268,7 +263,6 @@ class BlocksHandlerActor {
                 this.rotateZ(-angle);
                 break;
         }
-        this.publish("doCommand", "done", messageId);
     }
 
     translateOnAxis(axis, dist) {
@@ -307,27 +301,31 @@ class BlocksHandlerActor {
     rotateZ(angle) {
         this.rotateOnAxis(Microverse._zAxis, angle);
     }
-
-    mouseClickLeft() {
-        this.say("interaction", "clicked");
-    }
-
-    mouseDownLeft() {
-        this.say("interaction", "pressed");
-    }
-
-    mouseEnter() {
-        this.say("interaction", "mouse-entered");
-    }
-
-    mouseLeave() {
-        this.say("interaction", "mouse-departed");
-    }
 }
 
 class BlocksHandlerPawn {
     setup() {
-        this.listen("interaction", this.receiveUserInteraction);
+        this.addEventListener("pointerTap", "mouseClickLeft");
+        this.addEventListener("pointerDown", "mouseDownLeft");
+        this.addEventListener("pointerEnter", "mouseEnter");
+        this.addEventListener("pointerLeave", "mouseLeave");
+        this.addEventListener("pointerMove", "nop");
+    }
+
+    mouseClickLeft() {
+        this.receiveUserInteraction('clicked');
+    }
+
+    mouseDownLeft() {
+        this.receiveUserInteraction('pressed');
+    }
+
+    mouseEnter() {
+        this.receiveUserInteraction('mouse-entered');
+    }
+
+    mouseLeave() {
+        this.receiveUserInteraction('mouse-departed');
     }
 
     receiveUserInteraction(interaction) {
@@ -346,7 +344,7 @@ class SpriteManagerActor {
     }
 
     duplicateCard(options) {
-        const [[cardId, exemplarName], messageId] = options;
+        const [messageId, [cardId, exemplarName]] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         const data = target.collectCardData();
         const newCard = this.createCard(data);
@@ -357,7 +355,7 @@ class SpriteManagerActor {
     }
 
     removeCard(options) {
-        const [cardId, messageId] = options;
+        const [messageId, cardId] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         target.destroy();
     }
