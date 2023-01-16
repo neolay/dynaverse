@@ -179,6 +179,16 @@ class BlocksHandlerActor {
         this.listen(`${PREFIX}:move`, this.move);
         this.listen(`${PREFIX}:turn`, this.turn);
         this.listen(`${PREFIX}:roll`, this.roll);
+        this.listen(`${PREFIX}:test1`, this.test1);
+        this.listen(`${PREFIX}:test2`, this.test2);
+    }
+
+    test1() {
+        console.log("test1");
+    }
+
+    test2(data) {
+        console.log("test2", data);
     }
 
     _setTranslation(options) {
@@ -341,6 +351,16 @@ class SpriteManagerActor {
     setup() {
         this.subscribe("spriteManager", "duplicateCard", this.duplicateCard);
         this.subscribe("spriteManager", "removeCard", this.removeCard);
+        this.subscribe("spriteManager", "test3", this.test3);
+        this.subscribe("spriteManager", "test4", this.test4);
+    }
+
+    test3() {
+        console.log("test3");
+    }
+
+    test4(data) {
+        console.log("test4", data);
     }
 
     duplicateCard(options) {
