@@ -345,6 +345,10 @@ class BlocksHandlerPawn {
             sprite?.receiveUserInteraction(interaction);
         }
     }
+
+    getCenter() {
+        return Microverse.m4_getTranslation(this.global);
+    }
 }
 
 class SpriteManagerActor {
