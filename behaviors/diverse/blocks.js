@@ -75,70 +75,6 @@ class BlocksGUIPawn {
         requestAnimationFrame(loop);
     }
 
-    doCommand(options) {
-        const PREFIX = "blocks";
-        const [cardId, messageId, _, command, argsList] = options.asArray(); // ignore _ ("wait")
-        const args = argsList.asArray();
-        console.log("received", command, options);
-        let scope = cardId,
-            event = `${PREFIX}:${command}`,
-            data;
-        switch (command) {
-            case "setTranslation":
-                data = {translation: args};
-                break;
-            case "setRotation":
-                data = {rotation: Microverse.q_euler(...args)};
-                break;
-            case "setScale":
-                data = {scale: args};
-                break;
-            case "rotateTo":
-                data = Microverse.q_euler(...args);
-                break;
-            case "createCardClone":
-                scope = "spriteManager";
-                event = "duplicateCard";
-                data = [cardId, ...args];
-                break;
-            case "removeCardClone":
-                scope = "spriteManager";
-                event = "removeCard";
-                data = cardId;
-                break;
-            case "translateTo":
-            case "scaleTo":
-            case "move":
-            case "turn":
-            case "roll":
-                data = args;
-                break;
-        }
-        this.publish(scope, event, [data, messageId]);
-    }
-
-    _doCommandDone(messageId) {
-        const ide = window.world?.children[0];
-        if (ide) {
-            let payload = new List([messageId]);
-
-            if (!this._isBroadcastingMessage) {
-                this._isBroadcastingMessage = true;
-                ide.broadcast("_doCommandDone", this._broadcastCallback.bind(this), payload);
-                // setTimeout(() => {this._isBroadcastingMessage = false}, 1);
-            } else {
-                // retry; introduce random sleep time to avoid simultaneous broadcasting
-                setTimeout(() => {
-                    this._doCommandDone(messageId)
-                }, Math.floor(Math.random() * 10));
-            }
-        }
-    }
-
-    _broadcastCallback() {
-        this._isBroadcastingMessage = false;
-    }
-
     teardown() {
         const ide = window.world?.children[0];
         if (ide) {
@@ -179,16 +115,6 @@ class BlocksHandlerActor {
         this.listen(`${PREFIX}:move`, this.move);
         this.listen(`${PREFIX}:turn`, this.turn);
         this.listen(`${PREFIX}:roll`, this.roll);
-        this.listen(`${PREFIX}:test1`, this.test1);
-        this.listen(`${PREFIX}:test2`, this.test2);
-    }
-
-    test1() {
-        console.log("test1");
-    }
-
-    test2(data) {
-        console.log("test2", data);
     }
 
     _setTranslation(options) {
@@ -354,26 +280,12 @@ class BlocksHandlerPawn {
             sprite?.receiveUserInteraction(interaction);
         }
     }
-
-    getCenter() {
-        return Microverse.m4_getTranslation(this.global);
-    }
 }
 
 class SpriteManagerActor {
     setup() {
         this.subscribe("spriteManager", "duplicateCard", this.duplicateCard);
         this.subscribe("spriteManager", "removeCard", this.removeCard);
-        this.subscribe("spriteManager", "test3", this.test3);
-        this.subscribe("spriteManager", "test4", this.test4);
-    }
-
-    test3() {
-        console.log("test3");
-    }
-
-    test4(data) {
-        console.log("test4", data);
     }
 
     duplicateCard(options) {
