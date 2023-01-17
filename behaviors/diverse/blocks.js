@@ -194,31 +194,37 @@ class BlocksHandlerActor {
     _setTranslation(options) {
         const [messageId, args] = options;
         this.set({translation: args});
+        this.say('blocks:doneMessage', messageId);
     }
 
     _setRotation(options) {
         const [messageId, args] = options;
         this.set({rotation: Microverse.q_euler(...args)});
+        this.say('blocks:doneMessage', messageId);
     }
 
     _setScale(options) {
         const [messageId, args] = options;
         this.set({scale: args});
+        this.say('blocks:doneMessage', messageId);
     }
 
     _translateTo(options) {
         const [messageId, args] = options;
         this.translateTo(args);
+        this.say('blocks:doneMessage', messageId);
     }
 
     _rotateTo(options) {
         const [messageId, args] = options;
         this.rotateTo(Microverse.q_euler(...args));
+        this.say('blocks:doneMessage', messageId);
     }
 
     _scaleTo(options) {
         const [messageId, args] = options;
         this.scaleTo(args);
+        this.say('blocks:doneMessage', messageId);
     }
 
     move(options) {
@@ -243,6 +249,7 @@ class BlocksHandlerActor {
                 this.translateY(-dist);
                 break;
         }
+        this.say('blocks:doneMessage', messageId);
     }
 
     turn(options) {
@@ -261,6 +268,7 @@ class BlocksHandlerActor {
                 this.rotateY(-angle);
                 break;
         }
+        this.say('blocks:doneMessage', messageId);
     }
 
     roll(options) {
@@ -273,6 +281,7 @@ class BlocksHandlerActor {
                 this.rotateZ(-angle);
                 break;
         }
+        this.say('blocks:doneMessage', messageId);
     }
 
     translateOnAxis(axis, dist) {
@@ -376,12 +385,16 @@ class SpriteManagerActor {
         console.log("duplicate target card", target);
         console.log("new card", newCard);
         this.publish("spriteManager", "cloneSprite", [newCard, exemplarName]);
+        // this.publish(cardId, 'blocks:doneMessage', messageId);
     }
 
     removeCard(options) {
-        const [messageId, cardId] = options;
+        const [messageId, [cardId, exemplarName]] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
+        // this.publish(cardId, 'blocks:doneMessage', messageId);
+        // destroy will alse destroy listener.
         target.destroy();
+        // setTimeout(() => {}, 100);
     }
 }
 
