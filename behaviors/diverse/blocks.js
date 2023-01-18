@@ -289,7 +289,7 @@ class SpriteManagerActor {
     }
 
     duplicateCard(options) {
-        const [messageId, [cardId, exemplarName]] = options;
+        const [_, [cardId, exemplarName]] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         const data = target.collectCardData();
         const newCard = this.createCard(data);
@@ -301,7 +301,7 @@ class SpriteManagerActor {
     }
 
     removeCard(options) {
-        const [messageId, [cardId, exemplarName]] = options;
+        const [_, [cardId]] = options;
         const target = this.queryCards().filter(card => card.id === cardId)[0];
         // this.publish(cardId, 'blocks:doneMessage', messageId);
         // destroy will alse destroy listener.
