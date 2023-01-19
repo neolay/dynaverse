@@ -47,6 +47,7 @@ class BlocksGUIPawn {
             border: 1,
             // hideControls: true,
             // hideCategories: true,
+            // hideSpriteBar: true,
             noSprites: true,
             // noImports: true,
             // noOwnBlocks: true,
@@ -55,12 +56,13 @@ class BlocksGUIPawn {
             categories: [
                 "motion",
                 "looks",
+                "sound",
                 "control",
                 "sensing",
                 "operators",
                 "variables",
             ]
-        }
+        };
         const lang = this.actor._cardData.lang;
         if (lang) {
             config.lang = lang;
