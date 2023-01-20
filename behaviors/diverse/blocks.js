@@ -45,6 +45,7 @@ class BlocksGUIPawn {
             load: "./blocks/inline.xml",
             design: "flat",
             border: 1,
+            dynaverseMode: true,
             // hideControls: true,
             // hideCategories: true,
             // hideSpriteBar: true,
