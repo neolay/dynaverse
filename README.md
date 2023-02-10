@@ -15,13 +15,7 @@ git clone https://github.com/neolay/dynaverse.git
 ```
 
 ```bash
-cd Snap
-git checkout dynaverse-blocks
-```
-
-```bash
 cd ../microverse
-git checkout blocks
 npm install
 npm run build-lib
 ```
