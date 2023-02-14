@@ -14,7 +14,7 @@ export function init(Constants) {
                 name: "entrance",
                 type: "object",
                 spawn: "default",
-                behaviorModules: ["BlocksGUI", "SpriteManager"],
+                behaviorModules: ["SpriteManager"],
                 translation: [
                     7.5516356710613435,
                     -0.06965080749988539,
