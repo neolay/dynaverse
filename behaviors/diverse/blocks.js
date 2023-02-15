@@ -222,20 +222,7 @@ class SpriteManagerPawn {
     setup() {
         this.subscribe("spriteManager", "cloneSprite", this.cloneSprite);
         this.subscribe("spriteManager", "removeSprite", this.removeSprite);
-        this.cards = this.actor.queryCards().filter(card => card.layers.includes("pointer"));
-        this.handler = () => this.start();
-        document.addEventListener("click", this.handler);
-    }
-
-    start() {
-        const ide = window.world?.children[0];
-        if (ide) {
-            this.cards.forEach(card => {
-                this.addSprite(this.service("PawnManager").get(card.id));
-            });
-        }
-        document.removeEventListener("click", this.handler);
-        delete this.handler;
+        this.removeSprite(localize('Sprite'));
     }
 
     cloneSprite(options) {
@@ -257,8 +244,6 @@ class SpriteManagerPawn {
         if (ide) {
             ide.sprites.asArray().forEach(morph => {
                 if (morph.name === spriteName) {
-                    const editor = document.getElementById("editor");
-                    editor.style.display = "none";
                     ide.removeSprite(morph);
                 }
             });
